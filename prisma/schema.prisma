@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  firstName      String
+  secondName     String
+  hashedPassword String
+  email          String    @unique
+  registrationNumber          String    @unique
+  userType       UserType
+  exams          Exam[]    @relation("UserExams")
+  createdExams   Exam[]    @relation("UserCreatedExams")
+  clusters       Cluster[] @relation("ClusterAuthor")
+}
+
+model Exam {
+  id           Int          @id @default(autoincrement())
+  title        String
+  author       User         @relation("UserExams", fields: [authorId], references: [id])
+  authorId     Int
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  file         String
+  category     ExamCategory
+  level        ExamLevel
+  createdBy    User         @relation("UserCreatedExams", fields: [createdById], references: [id])
+  createdById  Int
+  clusterForm1 Cluster[]    @relation("ClusterExamsForm1")
+  clusterForm2 Cluster[]    @relation("ClusterExamsForm2")
+  clusterForm3 Cluster[]    @relation("ClusterExamsForm3")
+  clusterForm4 Cluster[]    @relation("ClusterExamsForm4")
+}
+
+model Cluster {
+  id         Int               @id @default(autoincrement())
+  title      String
+  author     User              @relation("ClusterAuthor", fields: [authorId], references: [id])
+  authorId   Int
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  visibility ClusterVisibility
+  examsForm1 Exam[]            @relation("ClusterExamsForm1")
+  examsForm2 Exam[]            @relation("ClusterExamsForm2")
+  examsForm3 Exam[]            @relation("ClusterExamsForm3")
+  examsForm4 Exam[]            @relation("ClusterExamsForm4")
+}
+
+enum UserType {
+  TEACHER
+  STUDENT
+  ADMIN
+}
+
+enum ExamCategory {
+  REVISION
+  ASSIGNMENT
+  BOOK
+}
+
+enum ExamLevel {
+  Form1
+  Form2
+  Form3
+  Form4
+}
+
+enum ClusterVisibility {
+  HIDDEN
+  VISIBLE
+}
