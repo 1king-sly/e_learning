@@ -48,7 +48,7 @@ model Cluster {
   authorId   Int
   createdAt  DateTime          @default(now())
   updatedAt  DateTime          @updatedAt
-  visibility ClusterVisibility
+  visibility ClusterVisibility @default(HIDDEN)
   examsForm1 Exam[]            @relation("ClusterExamsForm1")
   examsForm2 Exam[]            @relation("ClusterExamsForm2")
   examsForm3 Exam[]            @relation("ClusterExamsForm3")
