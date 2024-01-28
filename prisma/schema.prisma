@@ -21,8 +21,10 @@ model User {
   exams               Exam[]     @relation("UserExams")
   createdExams        Exam[]     @relation("UserCreatedExams")
   clusters            Cluster[]  @relation("ClusterAuthor")
-  examOpenings        ExamOpening[] // New relation to track exam openings
-}
+  examOpenings        ExamOpening[] 
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  }
 
 model Exam {
   id                  Int          @id @default(autoincrement())
