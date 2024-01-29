@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import student from "../public/images/students.jpg";
 import logo from "../public/images/logo.png";
