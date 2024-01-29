@@ -2,6 +2,9 @@ import Image from "next/image";
 import student from "../public/images/students.jpg";
 import logo from "../public/images/logo.png";
 import AuthForm from "./(ui)/AuthForm";
+import SideNav from "./(ui)/Student/Components/SideNav";
+import HelloSection from "./(ui)/Student/Components/HelloSection";
+import NavBar from "./(ui)/Student/Components/NavBar";
 
 export default function Home() {
   return (
@@ -15,12 +18,17 @@ export default function Home() {
           <h2>Sign in Now</h2>
           <div className="mx-auto">
             <AuthForm></AuthForm>
-          </div>
+          </div>  
           {/* <input type="email" placeholder="Email"/><br/>
           <input type="password" placeholder="password"/><br/>
           <button>Sign In</button><br/>
           <button>Create account</button> */}
         </div>
+      </div>
+      <div>
+            <NavBar/>
+            <SideNav/>
+            <HelloSection/>
       </div>
     </>
   );
