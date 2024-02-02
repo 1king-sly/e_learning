@@ -1,5 +1,4 @@
 import React from 'react'
-<<<<<<< HEAD
 import SideNav from './Component/SideNav'
 import NavBar from './Component/NavBar'
 
@@ -25,11 +24,5 @@ export default async function StudentLayout({
     </div>
 
     </>
-=======
-
-export default function layout() {
-  return (
-    <div>layout</div>
->>>>>>> 326b669353f12cfbabcd17e8a3478ba4a89a77f5
   )
 }
