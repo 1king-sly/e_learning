@@ -2,7 +2,7 @@ import React from 'react'
 
 function HelloSection() {
   return (
-    <div className='p-10 m-10 flex bg-gray-100 rounded-3xl w-1/2'>
+    <div className='p-10 m-20 flex bg-gray-100 rounded-3xl w-1/2'>
         <div className='font-serif'>
         <h1 className='text-2xl'>Greetings,</h1>
         <h1 className='text-3xl'>Username</h1>
