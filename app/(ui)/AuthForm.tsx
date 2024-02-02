@@ -2,9 +2,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Input from './Input';
 import Button from './Button';
-import { signIn, useSession } from 'next-auth/react';
+// import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+// import axios from 'axios';
 import toast from 'react-hot-toast';
 import clsx from 'clsx'
 
