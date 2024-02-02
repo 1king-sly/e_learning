@@ -3,9 +3,9 @@ import Link from 'next/link';
 
 export default function SideNav() {
   return (
-    <div className='p-8 pl-10 h-screen bg-gray-50 w-1/5 font-semibold hidden sm:block hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3 gap-2 '>
-        <h1 className='text-3xl'>E LEARNING </h1>
-        <div className='cursor-pointer'>
+    <div className='p-8 pl-10 h-screen bg-gray-50 w-1/5 font-semibold hidden sm:block md:flex-none md:justify-start md:p-2 md:px-3 gap-2 '>
+        <h1 className='text-3xl md:text-sm sm:text-xs'>E LEARNING </h1>
+        <div className='cursor-pointer md:text-sm'>
         <ul>
           <div className='flex my-5 hover:'>
              <Link href="/"  className='inline-flex items-center'>
