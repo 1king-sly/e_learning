@@ -8,6 +8,7 @@ import { fetchAllClusters ,createExam} from '@/app/lib/actions';
 import CreateExam from '../../Component/createBtn';
 import Options from '../../Component/Options';
 import toast from 'react-hot-toast';
+import { pathToFileURL } from 'url';
 
 export default  function Page() {
  
@@ -82,7 +83,7 @@ export default  function Page() {
   
       const reader = new FileReader();
       reader.onload = () => {
-        const base64String = reader.result?.toString().split(',')[1]; // Extract base64-encoded string
+        const base64String = reader.result?.toString().split(',')[1]; 
         setFormData({
           ...formData,
           file: {
