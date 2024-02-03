@@ -1,10 +1,18 @@
 import React from 'react'
 import HelloSection from '../../Component/HelloSection'
+import Tables from '../../Component/Tables'
 
 export default function DashboardPage() {
   return (
-    <div>
-        <HelloSection></HelloSection>
-    </div>
+    <>
+      <HelloSection></HelloSection>
+      
+      <Tables></Tables>
+      <Tables></Tables>
+      <Tables></Tables>
+      <Tables></Tables>
+      
+
+    </>
   )
 }

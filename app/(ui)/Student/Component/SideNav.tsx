@@ -3,11 +3,11 @@ import Link from 'next/link';
 
 export default function SideNav() {
   return (
-    <div className='p-8 pl-10 h-screen bg-gray-50 w-1/5 font-semibold hidden sm:block md:flex-none md:justify-start md:p-2 md:px-3 gap-2 '>
+    <div className='p-8 pl-10 h-screen  w-full font-semibold hidden sm:block md:flex-none md:justify-start md:p-2 md:px-3 gap-2 '>
         <h1 className='text-3xl md:text-sm sm:text-xs'>E LEARNING </h1>
         <div className='cursor-pointer md:text-sm'>
         <ul>
-          <div className='flex my-5 hover:'>
+          <div className='flex my-5'>
              <Link href="/"  className='inline-flex items-center'>
         <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 9V4H20v5zM4 12V4h6.5v8zm9.5 8v-8H20v8zM4 20v-5h6.5v5zm1-9h4.5V5H5zm9.5 8H19v-6h-4.5zm0-11H19V5h-4.5zM5 19h4.5v-3H5zm4.5-3"/></svg>
           <li className='ml-5 hidden md:block'>Dashboard</li>
