@@ -10,6 +10,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
+
     const { title,visibility } = body;
 
     if (!title) {
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
 
 
   } catch (error: any) {
-    console.log(error, 'CREATING PROJECT');
+    console.log(error, 'CREATING CLUSTER');
     return new NextResponse('Internal Error', { status: 500 });
   }
 }

@@ -36,18 +36,18 @@ export default function AuthForm() {
 
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (session?.status === 'authenticated') {
-  //   if ((session as any)?.data?.userType === 'ADMIN') {
-  //       router.push('/Admin/Dashboard');
-  //   } else if((session as any)?.data?.userType === 'STUDENT') {
-  //       router.push('/User/Dashboard');
-  //     }else{
-  //       router.push('/SuperAdmin/Dashboard')
-  //     }
-
-  //   }
-  // });
+  useEffect(() => {
+    if (session?.status === 'authenticated') {
+      if (session.data.userType === 'ADMIN') {
+        router.push('/Admin/Dashboard');
+      } else if(session.data.userType === 'STUDENT') {
+        router.push('/Student/Dashboard');
+      }
+       else if(session.data.userType === 'TEACHER') {
+        router.push('/Admin/Dashboard');
+      }
+    }
+  });
 
   const handleGuestSubmit = async() =>{
     const event = window.event;

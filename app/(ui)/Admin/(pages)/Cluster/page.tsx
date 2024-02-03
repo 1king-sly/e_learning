@@ -38,22 +38,26 @@ export default  function Page() {
 
     console.log(formData)
 
-    toast.loading('Creating Exam .....')
+    toast.loading('Creating Cluster .....')
 
     toggleLoading();
     try {
-      const create = await fetch('/api/create', {
+      const create = await fetch('/api/createCluster', {
         method: 'POST',
         body:JSON.stringify(formData)
         });
 
       if (create?.ok && create?.status === 200) {
-        toast.success('Exam Created Successfully')
+        toast.dismiss()
+        toast.success('Cluster Created Successfully')
       } else if (create?.status !== 200) {
+        toast.dismiss()
         toast.error('Something Went wrong')
       }
 
     } catch (error) {
+      toast.dismiss()
+
       toast.error('Server Side error')
     } finally {
       toggleLoading();
