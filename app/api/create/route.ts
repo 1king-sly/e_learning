@@ -3,16 +3,10 @@ import { authOptions } from '@/utils/authUptions';
 import { ExamCategory, ExamLevel } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
-import { UploadApiResponse, v2 as cloudinary } from 'cloudinary';
+
 import { Readable } from 'stream';
 
-// cloudinary.config({
-//   cloud_name: 'dwav3nker',
-//   api_key: '621821631817116',
-//   api_secret: 'G5igqMnD8nki-4q4LAj5S56EFjo',
-// });
-
-
+import cloudinary from '@/utils/cloudinary'
 
 export async function POST(request: Request) {
   try {
@@ -24,9 +18,6 @@ export async function POST(request: Request) {
     if (!title || !file || !level) {
       return new NextResponse('Missing info', { status: 400 });
     }
-
-    // const uploadedVideoResponse = await cloudinary.uploader.upload(file.name, { folder: 'flashcards', resource_type: 'auto' });
-
 
     const imageData = file.name;
 
