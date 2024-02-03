@@ -31,7 +31,6 @@ import { NextResponse
                 userType: UserType.STUDENT             },
         });
         
-
         return NextResponse.json(user)
     }
     catch(error:any){
