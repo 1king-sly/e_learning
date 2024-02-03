@@ -14,7 +14,7 @@ export default async function StudentLayout({
         <NavBar></NavBar>
       </div>
       <div className='w-full  max-h-full h-full flex flex-row'>
-        <div className='h-full overflow-hidden w-[25vw]   bg-sky-500  flex' >
+        <div className='h-full overflow-hidden w-[15vw] items-center justify-center bg-sky-500  flex' >
           <SideNav></SideNav>
 
         </div>
