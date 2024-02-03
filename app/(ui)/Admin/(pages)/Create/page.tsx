@@ -14,13 +14,13 @@ export default  function Page() {
  
   const [loading, setisLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
-
   const [formData, setFormData] = useState({
     title: '',
     category: '',
     level: '',
     file: null as { name: string, type: string, data: string } | null,
     type: '',
+    imagePreview: null as string | null,
   });
 
   const [filePreview, setFilePreview] = useState(null);
@@ -80,7 +80,7 @@ export default  function Page() {
       const file = files[0];
 
       
-  
+      
       const reader = new FileReader();
       reader.onload = () => {
         const base64String = reader.result?.toString().split(',')[1]; 
@@ -91,6 +91,7 @@ export default  function Page() {
             type: file.type,
             data: base64String || '',
           },
+          imagePreview: reader.result as string,
         });
       };
   
@@ -181,9 +182,29 @@ export default  function Page() {
 
             </div>
 
-    <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center">
               <div className="w-2/5 mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
+
+                 {formData.imagePreview ? (
+    /\.(jpg|jpeg|png|gif|jfif)$/i.test(formData.file?.name || '') ? (
+      <Image
+        src={formData.imagePreview}
+        alt="File Preview"
+        className="mb-4 max-w-full max-h-96"
+        width={150}
+        height={150}
+      />
+    ) : (
+      <Image
+        src={pdf}
+        alt="Document Preview"
+        className="mb-4 max-w-full max-h-96"
+        width={150}
+        height={150}
+      />
+    )
+  ) : null}
                   
                   <div className="mt-4 flex text-sm leading-6 text-gray-600">
                     <label
