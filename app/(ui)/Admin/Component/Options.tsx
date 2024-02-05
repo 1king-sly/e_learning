@@ -2,25 +2,12 @@
 import React from 'react'
 import { fetchAllClusters } from '@/app/lib/actions';
 
-export default async function Options({value,handleChange,disabled}:{
-  value:string,disabled:boolean,handleChange?:(event: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement | HTMLInputElement>)=>void
-}) {
+export default async function Options() {
 
     const clusters = await fetchAllClusters()
 
   return (
     <>
-
-<select
-        name='category'
-        className='bg-white outline-sky-400 px-2 py-1 rounded-md w-80 text-gray-800 text-sm'
-        required
-        title='category'
-        value={value}
-        onChange={handleChange}
-        disabled={disabled}
-        
-      >
         <option disabled value=''>
           Choose Cluster
         </option>
@@ -36,7 +23,6 @@ export default async function Options({value,handleChange,disabled}:{
           </option>
         )} 
 
-</select>
 
     </>
   )

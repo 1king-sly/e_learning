@@ -4,13 +4,12 @@ import Image from 'next/image';
 import Button from '@/app/(ui)/Button';
 import { useRouter } from 'next/navigation';
 import pdf from '@/public/pdf.png';
-import { fetchAllClusters ,createExam} from '@/app/lib/actions';
-import CreateExam from '../../Component/createBtn';
 import Options from '../../Component/Options';
 import toast from 'react-hot-toast';
-import { pathToFileURL } from 'url';
 
-export default  function Page() {
+
+
+export default function Page() {
  
   const [loading, setisLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -56,7 +55,7 @@ export default  function Page() {
         toast.dismiss();
         toast.success('Exam Created Successfully');
         router.push('/User/Dashboard');
-      } else if (create?.status !== 200) {
+      } else if ( create?.status !== 200) {
         toast.dismiss();
         toast.error('Something went wrong');
       }
@@ -78,16 +77,14 @@ export default  function Page() {
   
     if (name === 'file' && files && files.length > 0) {
       const file = files[0];
-
-      
       
       const reader = new FileReader();
       reader.onload = () => {
-        const base64String = reader.result?.toString().split(',')[1]; 
+        const base64String = reader.result?.toString().split(',')[1];
         setFormData({
           ...formData,
           file: {
-            name: file.name,
+            name: file.name,      
             type: file.type,
             data: base64String || '',
           },
@@ -104,12 +101,6 @@ export default  function Page() {
       });
     }
   };
-  
-  
-  
-  
-  
-  
   
 
   return (
@@ -174,8 +165,22 @@ export default  function Page() {
        <label>
     
         
-     
-        {/* <Options value={formData.category}  disabled={disabled}/> */}
+       <select
+        name='category'
+        className='bg-white outline-sky-400 px-2 py-1 rounded-md w-80 text-gray-800 text-sm'
+        required
+        title='category'
+        value={formData.category}
+        onChange={handleChange}
+        disabled={disabled}
+        
+      >
+       {/* <Options   /> */}
+
+
+      </select>
+      
+
         
       
         </label>
@@ -243,3 +248,5 @@ export default  function Page() {
     </>
   );
 }
+
+

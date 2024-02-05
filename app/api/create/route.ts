@@ -3,38 +3,59 @@ import { authOptions } from '@/utils/authUptions';
 import { ExamCategory, ExamLevel } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
-
+import { v4 as uuidv4 } from 'uuid';
 import { Readable } from 'stream';
-
-import cloudinary from '@/utils/cloudinary'
+import cloudinary from '@/utils/cloudinary';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-
-
     const { title, file, category, level } = body;
 
     if (!title || !file || !level) {
       return new NextResponse('Missing info', { status: 400 });
     }
 
-    const imageData = file.name;
+    const { data, type } = file;
 
-    const cloudinaryResponse = await cloudinary.uploader.upload(imageData, {
-      resource_type: 'auto',
-      // fromBase64: true,
+    const uniqueFilename = `${uuidv4()}.${type.split('/')[1]}`;
+
+    const bufferData = Buffer.from(data, 'base64');
+
+   
+    const uploadPromise = new Promise<string>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: 'auto',
+        },
+        async (error, result) => {
+          if (error) {
+            console.error(error);
+            reject('Cloudinary upload error');
+          } else {
+            console.log(result?.secure_url);
+            resolve(result?.secure_url || '');
+          }
+        }
+      );
+
+      const readableStream = new Readable();
+      readableStream.push(bufferData);
+      readableStream.push(null);
+
+      readableStream.pipe(uploadStream);
     });
 
-    console.log(cloudinaryResponse.secure_url)
+    
+    const cloudinaryFileUrl = await uploadPromise;
 
-    const user = await getServerSession(authOptions)
+    const user = await getServerSession(authOptions);
     const newExam = await prisma.exam.create({
       data: {
         title,
         authorId: parseInt(user.id),
         createdById: parseInt(user.id),
-        file: cloudinaryResponse.secure_url,
+        file: cloudinaryFileUrl,
         category: ExamCategory[category as keyof typeof ExamCategory],
         level: ExamLevel[level as keyof typeof ExamLevel],
       },
@@ -48,5 +69,3 @@ export async function POST(request: Request) {
     return new NextResponse('Internal Error', { status: 500 });
   }
 }
-
-
