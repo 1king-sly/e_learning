@@ -6,9 +6,14 @@ import { useRouter } from 'next/navigation';
 import pdf from '@/public/pdf.png';
 import Options from '../../Component/Options';
 import toast from 'react-hot-toast';
+import DocumentViewer from '../../Component/DocumentViewer';
+import PDFViewer from '../../Component/PDFViewer';
 
 
-
+type Category = {
+  id: number; 
+  title: string;
+};
 export default function Page() {
  
   const [loading, setisLoading] = useState(false);
@@ -18,7 +23,7 @@ export default function Page() {
     category: '',
     level: '',
     file: null as { name: string, type: string, data: string } | null,
-    type: '',
+    examType: '',
     imagePreview: null as string | null,
   });
 
@@ -27,9 +32,37 @@ export default function Page() {
     setisLoading((prevLoading) => !prevLoading);
   };
 
+ 
+
   const router = useRouter()
 
- 
+  const [categories, setCategories] = useState<Category[]>([]);
+  const handleFetch = async () => {
+    try {
+      const response = await fetch('/api/fetchClusters', {
+        method: 'GET',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch clusters (status: ${response.status})`);
+      }
+
+      const clusters: Category[] = await response.json(); 
+      
+      setCategories(clusters);
+      return clusters;
+    } catch (error) {
+      console.error('Error fetching clusters:', error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    
+    handleFetch();
+  }, []);
+  
+
 
   const handleSubmit = async () => {
     const event = window.event;
@@ -54,7 +87,7 @@ export default function Page() {
       if (create?.ok && create?.status === 200) {
         toast.dismiss();
         toast.success('Exam Created Successfully');
-        router.push('/User/Dashboard');
+        router.push('/Admin/Dashboard');
       } else if ( create?.status !== 200) {
         toast.dismiss();
         toast.error('Something went wrong');
@@ -102,14 +135,14 @@ export default function Page() {
     }
   };
   
+  
 
   return (
     <>
       <div className='w-full min-h-screen flex flex-col items-center justify-center pb-40'>
         <div className='flex flex-col items-center'>
           <h3 className='text-sky-300 max-[425px]:text-xs'>CREATE AN EXAM</h3>
-        </div>
-
+        </div>        
         <div>
           <form  className='w-[80vw] flex flex-col gap-2'>
             <div className='w-full flex justify-center items-center flex-col gap-2'>
@@ -126,11 +159,11 @@ export default function Page() {
 
               <label>
                 <select
-                  name='type'
+                  name='examType'
                   className='bg-white outline-sky-400 px-2 py-1 rounded-md w-80 text-gray-800 text-sm'
                   required
                   title='type'
-                  value={formData.type}
+                  value={formData.examType}
                   onChange={handleChange}
                   disabled={disabled}  
                 >
@@ -175,9 +208,14 @@ export default function Page() {
         disabled={disabled}
         
       >
-       {/* <Options   /> */}
-
-
+      <option disabled value=''>
+                    Choose cluster
+      </option>
+      {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.title}
+            </option>
+          ))}
       </select>
       
 

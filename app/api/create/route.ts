@@ -10,9 +10,10 @@ import cloudinary from '@/utils/cloudinary';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { title, file, category, level } = body;
+    const { title, file, examType, level,category } = body;
 
-    if (!title || !file || !level) {
+    console.log(body)
+    if (!title || !file || !level || !examType ) {
       return new NextResponse('Missing info', { status: 400 });
     }
 
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
             console.error(error);
             reject('Cloudinary upload error');
           } else {
-            console.log(result?.secure_url);
+            console.log(result?.secure_url)
             resolve(result?.secure_url || '');
           }
         }
@@ -56,8 +57,11 @@ export async function POST(request: Request) {
         authorId: parseInt(user.id),
         createdById: parseInt(user.id),
         file: cloudinaryFileUrl,
-        category: ExamCategory[category as keyof typeof ExamCategory],
+        category: ExamCategory[examType as keyof typeof ExamCategory],
         level: ExamLevel[level as keyof typeof ExamLevel],
+        clusters: {
+          connect: { id:parseInt(category)  }
+        },
       },
     });
 
