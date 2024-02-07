@@ -28,10 +28,9 @@ import { NextResponse
                 secondName,
                 hashedPassword,
                 registrationNumber,
-                userType: UserType.STUDENT             },
+                userType: UserType.ADMIN             },
         });
         
-
         return NextResponse.json(user)
     }
     catch(error:any){

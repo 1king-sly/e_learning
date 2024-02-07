@@ -38,11 +38,8 @@ model Exam {
   level               ExamLevel
   createdBy           User         @relation("UserCreatedExams", fields: [createdById], references: [id])
   createdById         Int
-  clusterForm1        Cluster[]    @relation("ClusterExamsForm1")
-  clusterForm2        Cluster[]    @relation("ClusterExamsForm2")
-  clusterForm3        Cluster[]    @relation("ClusterExamsForm3")
-  clusterForm4        Cluster[]    @relation("ClusterExamsForm4")
-  examOpenings        ExamOpening[] // New relation to track exam openings
+  clusters            Cluster[]    @relation("ClusterExams")
+  examOpenings        ExamOpening[] 
 }
 
 model Cluster {
@@ -53,10 +50,7 @@ model Cluster {
   createdAt           DateTime          @default(now())
   updatedAt           DateTime          @updatedAt
   visibility          ClusterVisibility @default(HIDDEN)
-  examsForm1          Exam[]            @relation("ClusterExamsForm1")
-  examsForm2          Exam[]            @relation("ClusterExamsForm2")
-  examsForm3          Exam[]            @relation("ClusterExamsForm3")
-  examsForm4          Exam[]            @relation("ClusterExamsForm4")
+  exams               Exam[]            @relation("ClusterExams")
 }
 
 model ExamOpening {

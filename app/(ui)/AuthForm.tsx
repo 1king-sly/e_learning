@@ -2,9 +2,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Input from './Input';
 import Button from './Button';
-// import { signIn, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-// import axios from 'axios';
+import axios from 'axios';
 import toast from 'react-hot-toast';
 import clsx from 'clsx'
 
@@ -32,72 +32,76 @@ export default function AuthForm() {
     setVariant((prevVariant) => (prevVariant === 'LOGIN' ? 'REGISTER' : 'LOGIN'));
   }, []);
 
-  // const session = useSession();
+  const session = useSession();
 
-  // const router = useRouter();
+  const router = useRouter();
 
-  // useEffect(() => {
-  //   if (session?.status === 'authenticated') {
-  //   if ((session as any)?.data?.userType === 'ADMIN') {
-  //       router.push('/Admin/Dashboard');
-  //   } else if((session as any)?.data?.userType === 'STUDENT') {
-  //       router.push('/User/Dashboard');
-  //     }else{
-  //       router.push('/SuperAdmin/Dashboard')
-  //     }
+  useEffect(() => {
+    if (session?.status === 'authenticated') {
+      if (session.data.userType === 'ADMIN') {
+        router.push('/Admin/Dashboard');
+      } else if(session.data.userType === 'STUDENT') {
+        router.push('/Student/Dashboard');
+      }
+       else if(session.data.userType === 'TEACHER') {
+        router.push('/Admin/Dashboard');
+      }
+    }
+  });
 
-  //   }
-  // });
+  const handleGuestSubmit = async() =>{
+    const event = window.event;
+    if (!event) {
+      return;
+    }
+    event.preventDefault();
 
-  // const handleGuestSubmit = async() =>{
-  //   const event = window.event;
-  //   if (!event) {
-  //     return;
-  //   }
-  //   event.preventDefault();
+    toggleLoading();
 
-  //   toggleLoading();
+    router.push('/Guest/Projects');   
+  }
 
-  //   router.push('/Guest/Projects');   
-  // }
+  const handleSubmit = async () => {
+    const event = window.event;
+    if (!event) {
+      return;
+    }
+    event.preventDefault();
 
-  // const handleSubmit = async () => {
-  //   const event = window.event;
-  //   if (!event) {
-  //     return;
-  //   }
-  //   event.preventDefault();
+    toggleLoading();
 
-  //   toggleLoading();
+    try {
+      toast.loading('Authenticating ...')
+      if (variant === 'REGISTER') {
+        await axios.post('/api/register', formData);
+        await signIn('credentials', formData);
+      }
 
-  //   try {
-  //     if (variant === 'REGISTER') {
-  //       await axios.post('/api/register', formData);
-  //       await signIn('credentials', formData);
-  //     }
+      if (variant === 'LOGIN') {
+        const callback = await signIn('credentials', {
+          ...formData,
+          redirect: false,
+        });
 
-  //     if (variant === 'LOGIN') {
-  //       const callback = await signIn('credentials', {
-  //         ...formData,
-  //         redirect: false,
-  //       });
+        if (callback?.error) {
+          toast.dismiss()
+          toast.error('Invalid Credentials');
+        } else if (callback?.ok && !callback?.error) {
+          toast.dismiss()
+          toast.success('Logged In');
+        }
+      }
+    } catch (error) {
+      toast.dismiss()
+      toast.error('Something went wrong');
+    } finally {
+      toggleLoading();
+    }
+  };
 
-  //       if (callback?.error) {
-  //         toast.error('Invalid Credentials');
-  //       } else if (callback?.ok && !callback?.error) {
-  //         toast.success('Logged In');
-  //       }
-  //     }
-  //   } catch (error) {
-  //     toast.error('Something went wrong');
-  //   } finally {
-  //     toggleLoading();
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   setDisabled(loading);
-  // }, [loading]);
+  useEffect(() => {
+    setDisabled(loading);
+  }, [loading]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event) {
@@ -177,7 +181,7 @@ export default function AuthForm() {
             <Button
               type='submit'
               fullWidth
-              // onClick={() => handleSubmit()}
+              onClick={() => handleSubmit()}
               disabled={disabled}
             >
               {variant === 'LOGIN' ? 'Sign in' : 'Register'}
@@ -194,7 +198,7 @@ export default function AuthForm() {
         <div className='mt-4 text-gray-100 '>
             <button
               type='submit'
-              // onClick={() => handleGuestSubmit()}
+              onClick={() => handleGuestSubmit()}
               disabled={disabled}
               className={clsx(`flex justify-center rounded-md px-2 py-1 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-sky-500 hover:bg-sky-600 focus-visible:outline-sky-600`,disabled&&'opacity-50 cursor-default')}
             >
