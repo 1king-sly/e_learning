@@ -25,14 +25,14 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
         
         <div className='grid grid-cols-4 gap-3 mx-20'>
           
-          {teachers.map((teacher)=>(
+          {teachers?.map((teacher)=>(
              <div className='my-10 shadow-lg bg-gray-100 w-full h-[35vh] rounded-xl text-center text-lg' key={teacher.id}>
              <Image src={ProfilePic} alt={'Profile Pic'} className='rounded-full h-20 w-20 mx-auto p-2'></Image>
-             <h1 className='p-2 text-xs'>{teacher.firstName + " " + teacher.secondName}</h1>
-             <h1 className='p-2 text-xs'>
+             <h1 className='p-2 text-sm'>{teacher.firstName + " " + teacher.secondName}</h1>
+             <h1 className='p-2 text-sm'>
               {teacher.email}
              </h1>
-             <h1 className='p-2 text-xs'>0711 111 111</h1>
+             <h1 className='p-2 text-sm'>0711 111 111</h1>
          </div>
           ))}
        

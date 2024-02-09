@@ -25,13 +25,10 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
             <SearchBar></SearchBar>
 
             <div>
-            <div className='px-20'>
-            <h1 className='text-2xl font-serif font-bold'>Student list</h1>
-            </div>
             <div className='mx-20'>
                 <table className='w-full'>
                     <tbody className='flex flex-col w-full gap-3'>
-                        {students.map((student)=>(
+                        {students?.map((student)=>(
                              <tr className='bg-gray-100 bg-opacity-65' key={student.id}>
                              <td className='w-1/4 pl-5 pr-32'>{student.firstName}</td>
                              <td className='w-1/4 px-32'>{student.registrationNumber}</td>

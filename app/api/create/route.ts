@@ -12,7 +12,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { title, file, examType, level,category } = body;
 
-    console.log(body)
     if (!title || !file || !level || !examType ) {
       return new NextResponse('Missing info', { status: 400 });
     }
@@ -27,7 +26,10 @@ export async function POST(request: Request) {
     const uploadPromise = new Promise<string>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          resource_type: 'auto',
+          resource_type: 'raw',
+          use_filename: true,
+          unique_filename: false,
+          format: 'pdf', 
         },
         async (error, result) => {
           if (error) {

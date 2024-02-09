@@ -8,6 +8,7 @@ declare module "next-auth" {
     registrationNumber: string,
     email:string,
     id:string,
+    image:string?,
   }
   interface Session {
     user:User 
@@ -17,18 +18,12 @@ declare module "next-auth" {
     registrationNumber: string,
     email:string,
     id:string,
+    image:string?,
+
 
     
   }
 
-  interface ProjectFormData{
-    schoolFromFormData:string,
-    title:string,
-    email:string,
-    ans1:string,
-    ans2:string, 
-    ans3: string,
-    ans4:string,
-  }
+
 }
 

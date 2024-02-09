@@ -296,6 +296,19 @@ export const countStudents = async () => {
 
   
 };
+export const countAll = async () => {
+  'use server';
+  try{
+      const users = await prisma.user.count()
+      return users
+   
+
+  }catch(error){
+    console.error("Error Counting all Students",error)
+  }
+
+  
+};
 export const countTeachers = async () => {
   'use server';
   try{
@@ -358,7 +371,6 @@ export const fetchStudents = async (query: string) => {
     return users;
   } catch (error) {
     console.log('Error fetching All Students ', error);
-    throw error; 
   } finally {
     await prisma.$disconnect();
   }
@@ -401,7 +413,6 @@ export const fetchTeachers = async (query: string) => {
     return users;
   } catch (error) {
     console.log('Error fetching All Teachers ', error);
-    throw error; 
   } finally {
     await prisma.$disconnect();
   }

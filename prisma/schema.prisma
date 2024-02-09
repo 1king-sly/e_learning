@@ -15,6 +15,7 @@ model User {
   firstName           String
   secondName          String
   hashedPassword      String
+  image               String    @default("")
   email               String     @unique
   registrationNumber  String     @unique
   userType            UserType
