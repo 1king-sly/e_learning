@@ -1,11 +1,19 @@
+'use server'
+import { fetchStudents } from '@/app/lib/actions';
 import React from 'react'
 
-export default function List() {
+export default async function List({searchParams}:{searchParams:string}) {
+
+    const params = new URLSearchParams(searchParams);
+    const q = params.get('query') || '';
+    const students = await fetchStudents(q)
   return (
+
+   
     <>
         <div>
             <div className='px-20'>
-            <h1 className='text-2xl font-serif font-bold'>Student's list</h1>
+            <h1 className='text-2xl font-serif font-bold'>Student list</h1>
             </div>
             <div className='mx-20'>
                 <table className='w-full'>
