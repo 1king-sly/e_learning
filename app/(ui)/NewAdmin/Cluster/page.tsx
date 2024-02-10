@@ -1,8 +1,15 @@
+'use server'
 import React from 'react'
 import Link from 'next/link'
-import ClusterCard from '../Components/ClusterCard'
+import SearchBar from '@/app/(ui)/Student/Component/SearchBar';
+import { fetchAllClusters } from '@/app/lib/actions'
 
-export default function page() {
+export default async function page({searchParams}:{searchParams:string}) {
+
+  const params = new URLSearchParams(searchParams);
+  const q = params.get('query') || '';
+  const clusters = await fetchAllClusters(q)
+  
   return (
     <>
         <div className='flex flex-row justify-between'>
@@ -14,15 +21,23 @@ export default function page() {
                 <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 12.5H6v-1h5.5V6h1v5.5H18v1h-5.5V18h-1z"/></svg>
             </div></Link>
         </div>
+        <SearchBar></SearchBar>
+
         <div className='grid grid-cols-4 gap-3 mx-20'>
-        <ClusterCard></ClusterCard>
-        <ClusterCard></ClusterCard>
-        <ClusterCard></ClusterCard>
-        <ClusterCard></ClusterCard>
-        <ClusterCard></ClusterCard>
-        <ClusterCard></ClusterCard>
-        <ClusterCard></ClusterCard>
-        <ClusterCard></ClusterCard>
+          {clusters?.map((cluster)=>(
+            <Link href={`/NewAdmin/Cluster/${cluster.id}`}  key={cluster.id}>
+                <div className='my-10 shadow-lg bg-gray-100 w-full h-[25vh] rounded-xl text-center text-lg'>
+               <h1 className='py-5 px-2'>
+                {cluster.title}
+               </h1>
+               <h1 className='py-5 px-2'>
+                {cluster.author?.firstName + " "+ cluster.author?.secondName}
+               </h1>
+           </div>
+            </Link>
+             
+          ))}
+       
         </div>
     </>
   )

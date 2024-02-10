@@ -23,7 +23,7 @@ export default function SearchBar() {
   
        replace(`${pathname}?${params.toString()}`)
   
-      },300)
+      },200)
   return (
     <div className='relative mx-20 my-5'>
     <input type="text" id='search' name='search'  placeholder="Search" className='w-full p-2 border-2 rounded-lg pr-10' onChange={(e)=>{

@@ -74,23 +74,66 @@ export const fetchUserCreatedExams = async (userId:number | undefined, query: st
   
 };
 
-export const fetchAllClusters = async () => {
+export const fetchUserCreatedExamsDashboard = async (userId:string | undefined) => {
+  'use server';
+
+
+  try{
+   
+      const examsCreated = await prisma.exam.findMany(
+       {
+        where: {
+          createdById:parseInt(userId as unknown as string),
+        },
+        take:5
+       }
+      )
+      return examsCreated
+    
+
+  }catch(error){
+    console.log("Error fetching All User Created exams",error)
+  }
+
+  
+};
+
+export const fetchAllClusters = async (query:string) => {
   'use server';
 
   try{
 
-    // if  (typeof query === 'string' && query.trim() !== '') {
-    //   const clusters = await prisma.cluster.findMany({
-    //     where: {
-    //       title: {
-    //         contains: query.trim(),
-    //       },
-    //     },
-    //   });
-    //   return clusters;
-    // }
+    if  (typeof query === 'string' && query.trim() !== '') {
+      const clusters = await prisma.cluster.findMany({
+        where: {
+          title: {
+            contains: query.trim(),
+          },
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      });
+      return clusters;
+    }
 
-    const clusters = await prisma.cluster.findMany()
+    const clusters = await prisma.cluster.findMany(
+      {
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      }
+    )
       return clusters
     
 
@@ -120,30 +163,43 @@ export const countAllClusters = async () => {
 };
 
 
-export const fetchSingleCluster = async (clusterId:string) => {
+export const fetchSingleCluster = async (clusterId: string,query:string) => {
   'use server';
 
-  try{
+  try {
+
+     if (typeof query === 'string' && query.trim()) {
 
       const cluster = await prisma.cluster.findUnique({
-        where:{
-          id:parseInt(clusterId)
+        where: {
+          id: parseInt(clusterId),
         },
-         select: {
-          title:true,
-          author:true,
-          createdAt:true,
-          visibility:true,
+        include: {
+          exams: {
+            where: {
+              title: {
+                contains: query.trim(),
+              },
+            },
+          },
         },
-      })
-      return cluster
-   
+      });
+      return cluster;
+    }
+    const cluster = await prisma.cluster.findUnique({
+      where: {
+        id: parseInt(clusterId),
+      },
+      include: {
+        exams: true, 
+      },
+    });
 
-  }catch(error){
-    console.error("Error fetching Single Cluster",error)
+    return cluster;
+  } catch (error) {
+    console.error('Error fetching Single Cluster Exams', error);
+    throw error;
   }
-
-  
 };
 export const fetchSingleExam = async (examId:string) => {
   'use server';
@@ -247,11 +303,14 @@ export const updateUser = async (formData: FormData) => {
 
 export const fetchUser = async (email:string) => {
   'use server';
+
+
   try{
+
 
     const user = await prisma.user.findUnique({
       where: {
-        email: email,
+        id: parseInt(email),
       },
       select: {
         id: true,
@@ -265,7 +324,6 @@ export const fetchUser = async (email:string) => {
         createdExams:true,
       },
     });
-
 
 
     return user;
