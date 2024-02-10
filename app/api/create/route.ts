@@ -12,9 +12,9 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { title, file, examType, level,category } = body;
 
-    if (!title || !file || !level || !examType ) {
-      return new NextResponse('Missing info', { status: 400 });
-    }
+    // if (!title || !file || !level || !examType ) {
+    //   return new NextResponse('Missing info', { status: 400 });
+    // }
 
     const { data, type } = file;
 

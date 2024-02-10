@@ -10,9 +10,13 @@ const DocumentViewer = ({ cloudinaryDocumentUrl }:{ cloudinaryDocumentUrl: strin
       title="Cloudinary Document Viewer"
       allowFullScreen
     //   sandbox="allow-same-origin allow-scripts"
-      className='w-[80vw] h-[80vh]'
+      className='w-full h-full  '
     ></iframe>
   );
 };
 
 export default DocumentViewer;
+
+// if (!title || !file || !level || !examType ) {
+    //   return new NextResponse('Missing info', { status: 400 });
+    // }

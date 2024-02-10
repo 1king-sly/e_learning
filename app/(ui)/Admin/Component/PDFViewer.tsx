@@ -9,10 +9,8 @@ const defaultLayoutPluginInstance = defaultLayoutPlugin();
 const PDFViewer = ({ pdfUrl }:{pdfUrl:string}) => {
   return (
     <div className='w-screen h-screen'>
-      <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.15.349/build/pdf.worker.js">
-        <Viewer fileUrl={pdfUrl}  plugins={[
-                    defaultLayoutPluginInstance,
-                ]} />
+      <Worker workerUrl="https://unpkg.com/pdfjs-dist@latest/build/pdf.worker.js">
+        <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} />
       </Worker>
     </div>
   );
