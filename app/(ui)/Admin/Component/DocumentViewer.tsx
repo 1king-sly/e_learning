@@ -1,4 +1,3 @@
-// DocumentViewer.js
 import React from 'react';
 
 const DocumentViewer = ({ cloudinaryDocumentUrl }:{ cloudinaryDocumentUrl: string }) => {
@@ -6,15 +5,18 @@ const DocumentViewer = ({ cloudinaryDocumentUrl }:{ cloudinaryDocumentUrl: strin
 
   return (
     <iframe
-      src={`${cloudinaryDocumentUrl}?embed=true`}  
-      width="100%"
-      height="800"
+      src={`${cloudinaryDocumentUrl}?embed=true`}
       frameBorder="0"
       title="Cloudinary Document Viewer"
+      allowFullScreen
     //   sandbox="allow-same-origin allow-scripts"
-      className='w-[80vw] h-[80vh]'
+      className='w-full h-full  '
     ></iframe>
   );
 };
 
 export default DocumentViewer;
+
+// if (!title || !file || !level || !examType ) {
+    //   return new NextResponse('Missing info', { status: 400 });
+    // }

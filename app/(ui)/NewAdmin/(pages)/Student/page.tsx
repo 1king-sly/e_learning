@@ -1,9 +1,19 @@
+'use server'
 import React from 'react'
 import SearchBar from '@/app/(ui)/Student/Component/SearchBar'
 import List from '../../Components/List'
+
 import Link from 'next/link'
 
-export default function StudentPage() {
+import { fetchStudents } from '@/app/lib/actions'
+
+export default async function StudentPage({searchParams}:{searchParams:string}) {
+    const params = new URLSearchParams(searchParams);
+    const q = params.get('query') || '';
+    const students = await fetchStudents(q)
+   
+
+
   return (
     <>
         <div>
@@ -18,10 +28,26 @@ export default function StudentPage() {
             </div>
             
             <SearchBar></SearchBar>
-            <div className='px-20'>
-            <h1 className='text-2xl font-serif font-bold'>Student's list</h1>
+
+
+            <div>
+            <div className='mx-20'>
+                <table className='w-full'>
+                    <tbody className='flex flex-col w-full gap-3'>
+                        {students?.map((student)=>(
+                             <tr className='bg-gray-100 bg-opacity-65' key={student.id}>
+                             <td className='w-1/4 pl-5 pr-32'>{student.firstName}</td>
+                             <td className='w-1/4 px-32'>{student.registrationNumber}</td>
+                             <td className='w-1/4 px-32'>{student.email} </td>
+                             
+                         </tr>
+                        ))}
+                                         
+                    </tbody>
+                </table>
             </div>
-            <List></List>
+        </div>
+
         </div>
     </>
     )

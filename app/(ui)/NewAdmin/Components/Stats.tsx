@@ -1,6 +1,11 @@
+'use server'
+import { countStudents, countTeachers,countAll } from '@/app/lib/actions'
 import React from 'react'
 
-export default function Stats() {
+export default async function Stats() {
+  const students = await countStudents()
+  const teachers = await countTeachers()
+  const all = await countAll()
   return (
     <>
       <div className=''>
@@ -9,7 +14,7 @@ export default function Stats() {
             <div>
               <div className="flex">
                 <h6 className="mr-2 text-4xl font-bold md:text-5xl text-deep-purple-accent-400">
-                  1.3K
+                 {all || 0}
                 </h6>
                 <div className="flex items-center justify-center rounded-full bg-teal-accent-400 w-7 h-7">
                   <svg className="text-teal-900 w-7 h-7" stroke="currentColor" viewBox="0 0 52 52">
@@ -25,7 +30,7 @@ export default function Stats() {
             <div>
               <div className="flex">
                 <h6 className="mr-2 text-4xl font-bold md:text-5xl text-deep-purple-accent-400">
-                  83
+                 {teachers || 0}
                 </h6>
                 <div className="flex items-center justify-center rounded-full bg-teal-accent-400 w-7 h-7">
                   <svg className="text-teal-900 w-7 h-7" stroke="currentColor" viewBox="0 0 52 52">
@@ -35,13 +40,13 @@ export default function Stats() {
               </div>
               <p className="mb-2 font-bold md:text-lg">Teachers</p>
               <p className="text-gray-700">
-              This is a total of all the Teachers currently using the website
+              This is a total of all the Teachers currently using the system
               </p>
             </div>
             <div>
               <div className="flex">
                 <h6 className="mr-2 text-4xl font-bold md:text-5xl text-deep-purple-accent-400">
-                  1.2K
+                 {students || 0}
                 </h6>
                 <div className="flex items-center justify-center rounded-full bg-teal-accent-400 w-7 h-7">
                   <svg className="text-teal-900 w-7 h-7" stroke="currentColor" viewBox="0 0 52 52">
@@ -51,7 +56,7 @@ export default function Stats() {
               </div>
               <p className="mb-2 font-bold md:text-lg">Students</p>
               <p className="text-gray-700">
-                This is a total of all the Students currently using the website
+                This is a total of all the Students currently using the system
               </p>
             </div>
           </div>

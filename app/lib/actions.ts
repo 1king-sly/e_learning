@@ -8,11 +8,7 @@ import { authOptions } from '@/utils/authUptions';
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs/promises';
 
-cloudinary.config({
-  cloud_name: 'dwav3nker',
-  api_key: '621821631817116',
-  api_secret: 'G5igqMnD8nki-4q4LAj5S56EFjo',
-});
+
 
 export const fetchStudentRecentExams = async (userId:number | undefined) => {
   'use server';
@@ -300,6 +296,19 @@ export const countStudents = async () => {
 
   
 };
+export const countAll = async () => {
+  'use server';
+  try{
+      const users = await prisma.user.count()
+      return users
+   
+
+  }catch(error){
+    console.error("Error Counting all Students",error)
+  }
+
+  
+};
 export const countTeachers = async () => {
   'use server';
   try{
@@ -324,8 +333,10 @@ export const countTeachers = async () => {
 
 
 export const fetchStudents = async (query: string) => {
+  'use server'
   try {
     if (typeof query === 'string' && query.trim()) {
+
       const users = await prisma.user.findMany({
         where: {
           userType: {
@@ -359,13 +370,13 @@ export const fetchStudents = async (query: string) => {
     );
     return users;
   } catch (error) {
-    console.log('Error fetching All Users ', error);
-    throw error; 
+    console.log('Error fetching All Students ', error);
   } finally {
     await prisma.$disconnect();
   }
 };
 export const fetchTeachers = async (query: string) => {
+  'use server'
   try {
     if (typeof query === 'string' && query.trim()) {
       const users = await prisma.user.findMany({
@@ -402,7 +413,6 @@ export const fetchTeachers = async (query: string) => {
     return users;
   } catch (error) {
     console.log('Error fetching All Teachers ', error);
-    throw error; 
   } finally {
     await prisma.$disconnect();
   }

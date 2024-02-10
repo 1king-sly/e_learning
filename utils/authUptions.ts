@@ -15,6 +15,7 @@ type User = {
   userType: UserType;
   createdAt: Date;
   updatedAt:Date;
+  image:string ,
 
 };
 type SessionStrategyType = 'jwt';
@@ -48,6 +49,7 @@ export const authOptions = {
             createdAt: true,
             updatedAt: true,
             email: true,
+            image:true,
           },
         });
       
@@ -73,6 +75,7 @@ export const authOptions = {
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
           hashedPassword: user.hashedPassword,
+          image:user.image,
 
           
           
@@ -95,6 +98,7 @@ export const authOptions = {
         registrationNumber:user.registrationNumber,
         createdAt:user.createdAt,
         updatedAt:user.updatedAt,
+        image:user.image,
 
       }
     }
@@ -119,6 +123,7 @@ export const authOptions = {
       registrationNumber:token.registrationNumber,
       createdAt:token.createdAt,
       updatedAt:token.updatedAt,
+      image:token.image,
 
 
     }
