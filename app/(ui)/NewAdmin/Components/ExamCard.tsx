@@ -14,6 +14,19 @@ export default function ExamCard() {
                   <td className='w-1/3 max-[425px]:hidden' >01/24/2024</td>
                   <Link href=''>
                   <td className='w-1/12' >
+                  <button className='bg-green-300 p-2 text-white text-sm lg:rounded-md rounded-full '>
+                    <div>
+                      <PencilIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
+                      <p className='hidden lg:block text-xs'>
+                         View
+                      </p>
+                    </div>
+                    </button>
+                  </td>
+                  </Link>
+
+                  <Link href=''>
+                  <td className='w-1/12' >
                   <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full '>
                     <div>
                       <PencilIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>

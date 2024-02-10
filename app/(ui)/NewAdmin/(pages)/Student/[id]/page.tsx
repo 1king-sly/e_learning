@@ -1,9 +1,14 @@
 import React from 'react'
+import ProfileIcon from '../../../Components/ProfileIcon'
+import SingleStudent from '../../../Components/SingleStudent'
 
-export default function SingleStudentPage() {
+export default function SingleStudentPage({params}: {params: {id:string}}) {
   return (
     <>
-        Display
+        <div className='my-10'>
+        <ProfileIcon></ProfileIcon>
+        </div>
+        <SingleStudent></SingleStudent>
     </>
     )
 }
