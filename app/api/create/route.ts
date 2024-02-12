@@ -1,6 +1,6 @@
 import prisma from '@/app/lib/prismadb';
 import { authOptions } from '@/utils/authUptions';
-import { ExamCategory, ExamLevel } from '@prisma/client';
+import {  ExamLevel } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,9 +11,9 @@ import { revalidatePath } from 'next/cache';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { title, file, examType, level,category } = body;
+    const { title, file, level,category } = body;
 
-    if (!title || !file || !level || !examType ) {
+    if (!title || !file || !level  ) {
       return new NextResponse('Missing info', { status: 400 });
     }
 
@@ -60,7 +60,6 @@ export async function POST(request: Request) {
         authorId: parseInt(user.id),
         createdById: parseInt(user.id),
         file: cloudinaryFileUrl,
-        category: ExamCategory[examType as keyof typeof ExamCategory],
         level: ExamLevel[level as keyof typeof ExamLevel],
         clusters: {
           connect: { id:parseInt(category)  }

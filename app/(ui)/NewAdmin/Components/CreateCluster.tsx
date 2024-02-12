@@ -17,6 +17,7 @@ export default function CreateCluster() {
     const [formData, setFormData] = useState({
     title: '',
     Visibility: '',
+    category:'',
   });
 
   const router = useRouter();
@@ -55,6 +56,7 @@ export default function CreateCluster() {
 
       if (create?.ok && create?.status === 200) {
         toast.dismiss()
+        toggleVisible()
         toast.success('Cluster Created Successfully')
       } else if (create?.status !== 200) {
         toast.dismiss()
@@ -124,7 +126,27 @@ export default function CreateCluster() {
                   <option value='Hidden'>Hidden</option>
                   <option value='Visible'>Visible</option>
                 </select>
-              </label>     
+              </label>   
+
+
+              <label>
+                <select
+                  name='category'
+                  className='bg-white outline-sky-400 px-2 py-1 rounded-md w-80 text-gray-800 text-sm'
+                  required
+                  title='type'
+                  value={formData.category}
+                  onChange={handleChange}
+                  disabled={disabled}  
+                >
+                  <option disabled value=''>
+                    Type
+                  </option>
+                  <option value='REVISION'>REVISION</option>
+                  <option value='ASSIGNMENT'>ASSIGNMENT</option>
+                  <option value='BOOK'>BOOK</option>
+                </select>
+              </label>  
             
              
             </div>

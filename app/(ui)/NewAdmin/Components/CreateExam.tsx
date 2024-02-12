@@ -19,7 +19,6 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
       category: clusterId,
       level: '',
       file: null as { name: string, type: string, data: string } | null,
-      examType: '',
       imagePreview: null as string | null,
     });
   
@@ -136,24 +135,7 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
                 disabled={disabled}
               ></textarea>
 
-              <label>
-                <select
-                  name='examType'
-                  className='bg-white outline-sky-400 px-2 py-1 rounded-md w-80 text-gray-800 text-sm'
-                  required
-                  title='type'
-                  value={formData.examType}
-                  onChange={handleChange}
-                  disabled={disabled}  
-                >
-                  <option disabled value=''>
-                    Type
-                  </option>
-                  <option value='REVISION'>REVISION</option>
-                  <option value='ASSIGNMENT'>ASSIGNMENT</option>
-                  <option value='BOOK'>BOOK</option>
-                </select>
-              </label>
+              
               <label>
                 <select
                   name='level'

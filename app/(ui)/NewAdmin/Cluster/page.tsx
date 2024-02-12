@@ -13,7 +13,7 @@ export default async function page({searchParams}:{searchParams:string}) {
   
   return (
     <>
-    ,<div className='p-10 pb-40 max-[425px]:p-1'>
+    <div className='p-10 pb-40 max-[425px]:p-1'>
       <CreateCluster></CreateCluster>
 
         <SearchBar placeholder='Search'/>

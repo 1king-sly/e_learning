@@ -35,7 +35,6 @@ model Exam {
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
   file                String
-  category            ExamCategory
   level               ExamLevel
   createdBy           User         @relation("UserCreatedExams", fields: [createdById], references: [id])
   createdById         Int
@@ -51,6 +50,7 @@ model Cluster {
   createdAt           DateTime          @default(now())
   updatedAt           DateTime          @updatedAt
   visibility          ClusterVisibility @default(HIDDEN)
+  category            ExamCategory
   exams               Exam[]            @relation("ClusterExams")
 }
 

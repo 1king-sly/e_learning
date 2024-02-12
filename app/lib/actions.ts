@@ -10,16 +10,20 @@ import fs from 'fs/promises';
 
 
 
-export const fetchStudentRecentExams = async (userId:number | undefined) => {
+export const fetchStudentRecentExams = async () => {
   'use server';
   try{
+
+    const user = await getServerSession(authOptions)
+
+    const userId = user?.id
 
     if (!userId) {
       throw new Error('User ID is required.');
     }
     const student = await prisma.user.findUnique({
       where: {
-        id: parseInt(userId as unknown as string),
+        id: parseInt(userId),
       },
       include: {
         exams: {
@@ -214,7 +218,6 @@ export const fetchSingleExam = async (examId:string) => {
           author:true,
           createdAt:true,
           file:true,
-          category:true,
           createdBy:true,
           level:true, 
         },
@@ -603,7 +606,6 @@ export const createExam = async (formData: FormData) => {
           authorId: authorId,
           createdById: authorId,
           file: cloudinaryResponse.secure_url,
-          category: ExamCategory[type as keyof typeof ExamCategory],
           level: ExamLevel[level as keyof typeof ExamLevel],
         },
       });
