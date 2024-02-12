@@ -1,18 +1,23 @@
 'use server'
 import React from 'react'
+import SearchBar from '../../Component/SearchBar'
 import { FolderIcon } from '@heroicons/react/24/outline'
-import { fetchStudentExamClusters } from '@/app/lib/actions'
+import { fetchStudentAssignmentClusters } from '@/app/lib/actions'
 
-
-export default async function Folder({searchParams}:{searchParams:string}) {
-
+export default async function AssignmentPage({searchParams}:{searchParams:string}) {
 
   const params = new URLSearchParams(searchParams);
   const q = params.get('query') || '';
-  const exams = await fetchStudentExamClusters(q)
+  const exams = await fetchStudentAssignmentClusters(q)
   return (
-  <>
-    <div>
+    <>
+        <div>
+            <div className='mx-20 mt-10'>
+                <h1 className='text-4xl font-serif font-bold'>Assignments</h1>
+            </div>
+            <SearchBar placeholder='Search'></SearchBar>
+
+         <div>
         <div className='pl-20 grid grid-cols-4 gap-4 p-5'>
          { exams?.map((exam)=>(
             <div className='' key={exam.id}>
@@ -22,6 +27,7 @@ export default async function Folder({searchParams}:{searchParams:string}) {
          ))}   
         </div>
     </div>
-  </>  
+        </div>
+    </>
   )
 }

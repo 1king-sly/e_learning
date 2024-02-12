@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const body = await request.json();
 
 
-    const { title,visibility,category } = body;
+    const { title,Visibility,category } = body;
 
     if (!title) {
       return new NextResponse('Missing info', { status: 400 });
@@ -25,25 +25,12 @@ export async function POST(request: Request) {
 
     const authorId = parseInt(session?.id);
 
-    if(visibility){
-      const newCluster = await prisma.cluster.create({
-        data: {
-          title,
-          category:ExamCategory[category as keyof typeof ExamCategory],
-          authorId:authorId,
-          visibility:ClusterVisibility[visibility as keyof typeof ClusterVisibility]
-        },
-      });
-      
-      return new NextResponse(JSON.stringify(newCluster), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
     const newCluster = await prisma.cluster.create({
       data: {
         title,
         authorId:authorId,
         category:ExamCategory[category as keyof typeof ExamCategory],
+        visibility:ClusterVisibility[Visibility as keyof typeof ClusterVisibility ]
       },
     });
 

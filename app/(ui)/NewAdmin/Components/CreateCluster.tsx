@@ -123,8 +123,8 @@ export default function CreateCluster() {
                    <option disabled value=''>
                    Choose Visibility
                   </option> 
-                  <option value='Hidden'>Hidden</option>
-                  <option value='Visible'>Visible</option>
+                  <option value='HIDDEN'>Hidden</option>
+                  <option value='VISIBLE'>Visible</option>
                 </select>
               </label>   
 

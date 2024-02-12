@@ -618,3 +618,164 @@ export const createExam = async (formData: FormData) => {
     console.error(error, 'CREATING PROJECT');
   }
 };
+
+
+export const fetchStudentExamClusters = async (query:string) => {
+  'use server';
+
+  try{
+
+    if  (typeof query === 'string' && query.trim() !== '') {
+      const clusters = await prisma.cluster.findMany({
+        where: {
+          title: {
+            contains: query.trim(),
+          },
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.REVISION  
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      });
+      return clusters;
+    }
+
+    const clusters = await prisma.cluster.findMany(
+      {
+        where:{
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.REVISION
+
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      }
+    )
+      return clusters
+    
+
+  }catch(error){
+    console.error("Error fetching Exam Clusters",error)
+  }
+
+  
+};
+export const fetchStudentAssignmentClusters = async (query:string) => {
+  'use server';
+
+  try{
+
+    if  (typeof query === 'string' && query.trim() !== '') {
+      const clusters = await prisma.cluster.findMany({
+        where: {
+          title: {
+            contains: query.trim(),
+          },
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.ASSIGNMENT  
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      });
+
+      return clusters;
+    }
+
+    const clusters = await prisma.cluster.findMany(
+      {
+        where:{
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.ASSIGNMENT
+
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      }
+    )
+
+      return clusters
+    
+
+  }catch(error){
+    console.error("Error fetching Assignment Clusters",error)
+  }
+
+  
+};
+export const fetchStudentBookClusters = async (query:string) => {
+  'use server';
+
+  try{
+
+    if  (typeof query === 'string' && query.trim() !== '') {
+      const clusters = await prisma.cluster.findMany({
+        where: {
+          title: {
+            contains: query.trim(),
+          },
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.BOOK  
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      });
+      return clusters;
+    }
+
+    const clusters = await prisma.cluster.findMany(
+      {
+        where:{
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.BOOK
+
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      }
+    )     
+
+      return clusters
+    
+
+  }catch(error){
+    console.error("Error fetching Book Clusters",error)
+  }
+
+  
+};
