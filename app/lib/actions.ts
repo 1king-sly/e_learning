@@ -21,21 +21,26 @@ export const fetchStudentRecentExams = async () => {
     if (!userId) {
       throw new Error('User ID is required.');
     }
-    const student = await prisma.user.findUnique({
-      where: {
-        id: parseInt(userId),
+    const exams = await prisma.examOpening.findMany({
+      where:{
+        userId:parseInt(userId)
       },
-      include: {
-        exams: {
-          take: 5,
-          orderBy: {
-            createdAt: 'desc',
-          },
-        },
-      },
-    });
+      include:{
+        exam:{
+          select:{
+            title:true,
+            createdAt:true,
+            author:true,
+            file:true,
+            id:true,
+          }
+          
+        }
+      }
+    })
 
-    return student?.exams
+    console.log(exams)
+    return exams
     
 
   }catch(error){
@@ -206,7 +211,7 @@ export const fetchSingleCluster = async (clusterId: string,query:string) => {
 };
 export const fetchSingleExam = async (examId:string) => {
   'use server';
-
+    const user = await getServerSession(authOptions)
   try{
 
       const exam = await prisma.exam.findUnique({
@@ -222,6 +227,17 @@ export const fetchSingleExam = async (examId:string) => {
           level:true, 
         },
       })
+
+      if(exam){
+        const openedExam = await prisma.examOpening.create({
+          data:{
+            userId:parseInt(user?.id),
+            examId:parseInt(examId)
+          }
+        })
+
+        return openedExam
+      }
       return exam
    
 
