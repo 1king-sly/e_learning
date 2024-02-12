@@ -3,9 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Button from '../../Button';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import SearchBar from '@/app/(ui)/Student/Component/SearchBar';
-import { fetchSingleCluster } from '@/app/lib/actions';
-import Link from 'next/link';
 import clsx from 'clsx';
 
 

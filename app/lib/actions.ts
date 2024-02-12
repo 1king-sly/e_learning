@@ -45,22 +45,22 @@ export const fetchStudentRecentExams = async () => {
   
 };
 
-export const fetchUserCreatedExams = async (userId:number | undefined, query: string) => {
+export const fetchUserCreatedExams = async (userId:number | undefined) => {
   'use server';
 
 
   try{
-    if  (typeof query === 'string' && query.trim() !== '') {
-      const examsCreated = await prisma.exam.findMany({
-        where: {
-          createdById:parseInt(userId as unknown as string),
-          title: {
-            contains: query.trim(),
-          },
-        },
-      });
-      return examsCreated;
-    }
+    // if  (typeof query === 'string' && query.trim() !== '') {
+    //   const examsCreated = await prisma.exam.findMany({
+    //     where: {
+    //       createdById:parseInt(userId as unknown as string),
+    //       title: {
+    //         contains: query.trim(),
+    //       },
+    //     },
+    //   });
+    //   return examsCreated;
+    // }
       const examsCreated = await prisma.exam.findMany(
        {
         where: {

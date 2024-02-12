@@ -18,9 +18,9 @@ export default function ProfileForm() {
             </div>
             <div className='flex justify-center gap-9 my-6'>
                 <h1 className='mr-20'>Gender</h1>
-                <input type='radio' name='Gender' value='Male'></input>
+                <input type='radio' name='Gender' value='Male' title='gender'></input>
                 <label>Male</label>
-                <input type='radio' name='Gender' value='Female'></input>
+                <input type='radio' name='Gender' value='Female' title='gender'></input>
                 <label>Female</label>
             </div>
             <div className='flex justify-center'>

@@ -9,7 +9,6 @@ const DocumentViewer = ({ cloudinaryDocumentUrl }:{ cloudinaryDocumentUrl: strin
       frameBorder="0"
       title="Cloudinary Document Viewer"
       allowFullScreen
-    //   sandbox="allow-same-origin allow-scripts"
       className='w-full h-full  '
     ></iframe>
   );

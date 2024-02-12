@@ -4,10 +4,8 @@ import Image from 'next/image';
 import Button from '@/app/(ui)/Button';
 import { useRouter } from 'next/navigation';
 import pdf from '@/public/pdf.png';
-import Options from '../../Component/Options';
 import toast from 'react-hot-toast';
-import DocumentViewer from '../../Component/DocumentViewer';
-import PDFViewer from '../../Component/PDFViewer';
+
 
 
 type Category = {
@@ -27,7 +25,6 @@ export default function Page() {
     imagePreview: null as string | null,
   });
 
-  const [filePreview, setFilePreview] = useState(null);
   const toggleLoading = () => {
     setisLoading((prevLoading) => !prevLoading);
   };

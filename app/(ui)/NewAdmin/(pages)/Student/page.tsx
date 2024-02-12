@@ -27,7 +27,7 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
             </div></Link>
             </div>
             
-            <SearchBar></SearchBar>
+            <SearchBar placeholder='Search'></SearchBar>
 
 
             <div>
