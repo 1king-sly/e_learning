@@ -6,15 +6,16 @@ import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { Readable } from 'stream';
 import cloudinary from '@/utils/cloudinary';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { title, file, examType, level,category } = body;
 
-    // if (!title || !file || !level || !examType ) {
-    //   return new NextResponse('Missing info', { status: 400 });
-    // }
+    if (!title || !file || !level || !examType ) {
+      return new NextResponse('Missing info', { status: 400 });
+    }
 
     const { data, type } = file;
 
@@ -67,6 +68,7 @@ export async function POST(request: Request) {
       },
     });
 
+    revalidatePath(`/NewAdmin/Cluster/${category}`)
     return new NextResponse(JSON.stringify(newExam), {
       headers: { 'Content-Type': 'application/json' },
     });

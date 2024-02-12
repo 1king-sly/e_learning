@@ -5,6 +5,7 @@ import Image from 'next/image'
 import profile from '@/public/images/ProfilePic.jpeg'
 import { fetchUser, updateUser } from '@/app/lib/actions';
 import {  redirect } from 'next/navigation';
+import TeachersExam from '../../../Components/TeachersExam';
 
 export default async function Page({ params }: { params: { email: string } }) {  
     const userEmail = params.email
@@ -14,7 +15,8 @@ export default async function Page({ params }: { params: { email: string } }) {
   return (
     <>
        <div className='w-full h-full flex items-center justify-center '>
-      <div className='shadow-lg rounded-md flex flex-col w-96 h-96  items-center justify-center'>
+        <div className='w-1/3'>
+        <div className='shadow-lg rounded-md flex flex-col w-96 h-96  items-center justify-center'>
         <div className=' h-24 flex items-center justify-center  gap-4 px-2'>
           <Image className='h-20 w-20 rounded-full shadow-md' src={ profile} alt='profile'></Image>         
         </div>
@@ -46,15 +48,19 @@ export default async function Page({ params }: { params: { email: string } }) {
         </div>
        
         </form>
-       
-        
-        
-
-
       </div>
+        </div>
 
-      
+        <div className='flex flex-1 '>
+        <div className='shadow-lg rounded-md flex flex-col w-full h-96  '>
+        <div className='mx-10'>
+          <h1 className='text-md'>Exams By: Teacher's Name</h1>
+          {/* <TeachersExam ></TeachersExam>
+          <TeachersExam ></TeachersExam> */}
 
+        </div>
+      </div>
+        </div>     
     </div>
     </>
   );

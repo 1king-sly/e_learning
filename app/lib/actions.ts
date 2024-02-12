@@ -198,7 +198,6 @@ export const fetchSingleCluster = async (clusterId: string,query:string) => {
     return cluster;
   } catch (error) {
     console.error('Error fetching Single Cluster Exams', error);
-    throw error;
   }
 };
 export const fetchSingleExam = async (examId:string) => {

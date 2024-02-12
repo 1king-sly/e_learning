@@ -23,7 +23,7 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
             </div>
         </div>
         
-        <SearchBar></SearchBar>
+        <SearchBar placeholder='search'></SearchBar>
         
         <div className='grid grid-cols-4 gap-3 mx-20'>
           
