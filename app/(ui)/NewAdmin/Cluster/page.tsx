@@ -18,7 +18,7 @@ export default async function page({searchParams}:{searchParams:string}) {
 
         <SearchBar placeholder='Search'/>
 
-        <div className='grid grid-cols-4 gap-3 mx-20'>
+        <div className='grid grid-cols-3 gap-3 mx-20'>
           {clusters?.map((cluster)=>(
             <Link href={`/NewAdmin/Cluster/${cluster.id}`}  key={cluster.id}>
                 <div className='my-10 shadow-lg bg-gray-100 w-full h-[25vh] rounded-xl text-center text-lg'>
