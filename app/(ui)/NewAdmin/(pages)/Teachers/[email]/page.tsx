@@ -55,8 +55,8 @@ export default async function Page({ params }: { params: { email: string } }) {
         <div className='shadow-lg rounded-md flex flex-col w-full h-96  '>
         <div className='mx-10'>
           <h1 className='text-md'>Exams By: Teacher's Name</h1>
-          {/* <TeachersExam ></TeachersExam>
-          <TeachersExam ></TeachersExam> */}
+          <TeachersExam ></TeachersExam>
+          <TeachersExam ></TeachersExam>
 
         </div>
       </div>

@@ -24,7 +24,7 @@ export default function SideNav() {
                 <li className='mx-2 hidden lg:block'>Notes</li>
               </Link></div>
             <div className='flex my-3 hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-center lg:justify-start md:p-2 md:px-3 gap-2 rounded-md w-full h-12'>
-              <Link href="/"  className='inline-flex items-center'>
+              <Link href="/Student/Assignment"  className='inline-flex items-center'>
                 <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.75 1.75h10.5v12.5H2.75zm3 6h4.5m-4.5 3h2.5m-2.5-6h4.5"/></svg>
                 <li className='mx-2 hidden lg:block'>Assignment</li>
               </Link></div>
