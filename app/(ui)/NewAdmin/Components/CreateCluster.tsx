@@ -4,6 +4,7 @@ import Button from '../../Button';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
+import { createCluster } from '@/app/lib/actions';
 
 
 
@@ -40,29 +41,41 @@ export default function CreateCluster() {
     }
     event.preventDefault();
 
-    console.log(formData)
-
+    const formDataAsFormData = new FormData();
+    formDataAsFormData.append('title', formData.title);
+    formDataAsFormData.append('Visibility', formData.Visibility);
+    formDataAsFormData.append('category', formData.category);
     toast.loading('Creating Cluster .....')
 
     toggleLoading();
     try {
-      const create = await fetch('/api/createCluster', {
-        method: 'POST',
-        body:JSON.stringify(formData)
-        });
+      // const create = await fetch('/api/createCluster', {
+      //   method: 'POST',
+      //   body:JSON.stringify(formData)
+      //   });
 
-      if (create?.ok && create?.status === 200) {
+      const create = await createCluster(formDataAsFormData)
+
+      if(create){
         toast.dismiss()
         toggleVisible()
         toast.success('Cluster Created Successfully')
-      } else if (create?.status !== 200) {
+      }else{
         toast.dismiss()
-        toast.error('Something Went wrong')
+        toast.error('Something went wrong')
       }
+
+      // if (create?.ok && create?.status === 200) {
+      //   toast.dismiss()
+      //   toggleVisible()
+      //   toast.success('Cluster Created Successfully')
+      // } else if (create?.status !== 200) {
+      //   toast.dismiss()
+      //   toast.error('Something Went wrong')
+      // }
 
     } catch (error) {
       toast.dismiss()
-
       toast.error('Server Side error')
     } finally {
       toggleLoading();
