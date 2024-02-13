@@ -1,3 +1,5 @@
+'use server'
+
 import prisma from '@/app/lib/prismadb';
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -5,33 +7,50 @@ import bcrypt from 'bcrypt'
 import { ClusterVisibility, ExamCategory, ExamLevel, UserType } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/authUptions';
-import { v2 as cloudinary } from 'cloudinary';
-import fs from 'fs/promises';
+import cloudinary from '@/utils/cloudinary';
+import { Readable } from 'stream';
 
 
 
-export const fetchStudentRecentExams = async (userId:number | undefined) => {
+
+export const fetchStudentRecentExams = async () => {
   'use server';
   try{
+
+    const user = await getServerSession(authOptions)
+
+    const userId = user?.id
 
     if (!userId) {
       throw new Error('User ID is required.');
     }
-    const student = await prisma.user.findUnique({
-      where: {
-        id: parseInt(userId as unknown as string),
+    const exams = await prisma.examOpening.findMany({
+      where:{
+        userId:parseInt(userId)
       },
-      include: {
-        exams: {
-          take: 5,
-          orderBy: {
-            createdAt: 'desc',
+      include:{
+        exam:{
+          select:{
+            title:true,
+            createdAt:true,
+            author:true,
+            file:true,
+            id:true,
           },
-        },
-      },
-    });
 
-    return student?.exams
+
+
+        }
+
+      },
+        take:5,
+        orderBy:{
+          openedAt:'desc'
+        }
+       
+    })
+
+    return exams
     
 
   }catch(error){
@@ -41,22 +60,22 @@ export const fetchStudentRecentExams = async (userId:number | undefined) => {
   
 };
 
-export const fetchUserCreatedExams = async (userId:number | undefined, query: string) => {
+export const fetchUserCreatedExams = async (userId:number | undefined) => {
   'use server';
 
 
   try{
-    if  (typeof query === 'string' && query.trim() !== '') {
-      const examsCreated = await prisma.exam.findMany({
-        where: {
-          createdById:parseInt(userId as unknown as string),
-          title: {
-            contains: query.trim(),
-          },
-        },
-      });
-      return examsCreated;
-    }
+    // if  (typeof query === 'string' && query.trim() !== '') {
+    //   const examsCreated = await prisma.exam.findMany({
+    //     where: {
+    //       createdById:parseInt(userId as unknown as string),
+    //       title: {
+    //         contains: query.trim(),
+    //       },
+    //     },
+    //   });
+    //   return examsCreated;
+    // }
       const examsCreated = await prisma.exam.findMany(
        {
         where: {
@@ -118,6 +137,9 @@ export const fetchAllClusters = async (query:string) => {
             },
           },
         },
+        orderBy: {
+          createdAt: 'desc',
+        },
       });
       return clusters;
     }
@@ -132,6 +154,10 @@ export const fetchAllClusters = async (query:string) => {
             },
           },
         },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        
       }
     )
       return clusters
@@ -180,9 +206,23 @@ export const fetchSingleCluster = async (clusterId: string,query:string) => {
               title: {
                 contains: query.trim(),
               },
+
             },
+            select:{
+              createdAt:true,
+              file:true,
+              author:true,
+              title:true,
+              id:true,
+            },
+            orderBy: {
+              createdAt: 'desc',
+            },
+
           },
         },
+        
+        
       });
       return cluster;
     }
@@ -191,7 +231,19 @@ export const fetchSingleCluster = async (clusterId: string,query:string) => {
         id: parseInt(clusterId),
       },
       include: {
-        exams: true, 
+        exams: {
+          select:{
+            createdAt:true,
+            file:true,
+            author:true,
+            title:true,
+            id:true,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        }, 
+        
       },
     });
 
@@ -202,7 +254,7 @@ export const fetchSingleCluster = async (clusterId: string,query:string) => {
 };
 export const fetchSingleExam = async (examId:string) => {
   'use server';
-
+    const user = await getServerSession(authOptions)
   try{
 
       const exam = await prisma.exam.findUnique({
@@ -214,11 +266,45 @@ export const fetchSingleExam = async (examId:string) => {
           author:true,
           createdAt:true,
           file:true,
-          category:true,
           createdBy:true,
           level:true, 
         },
       })
+
+      if(exam){
+
+        const existing= await prisma.examOpening.findMany({
+          where:{
+            userId:parseInt(user?.id),
+            examId:parseInt(examId)
+          }
+        })
+
+        if(existing){
+          const delExist = await prisma.examOpening.deleteMany({
+            where:{
+            userId:parseInt(user?.id),
+            examId:parseInt(examId)
+            }
+          })
+          if(delExist){
+            const openedExam = await prisma.examOpening.create({
+              data:{
+                userId:parseInt(user?.id),
+                examId:parseInt(examId)
+              }
+            })
+          }
+        }else{
+          const openedExam = await prisma.examOpening.create({
+            data:{
+              userId:parseInt(user?.id),
+              examId:parseInt(examId)
+            }
+          })
+        }
+ 
+      }
       return exam
    
 
@@ -555,18 +641,248 @@ export const deleteSingleCluster = async (formData: FormData) => {
 };
 
 
-export const createExam = async (formData: FormData) => {
-  'use server'
+export const createExam = async (formData:any) => {
+  try {
+    const title = formData.title
+    const file = formData.file 
+    const category = formData.category
+    const level = formData.level
 
-  console.log(formData)
+    if(!title || !file || !category || !level ){
+      throw new Error('Misssing Required Info')
+    }
+   
+    const { data, type } = file;
+
+
+    const bufferData = Buffer.from(data, 'base64');
+
+
+    const uploadPromise = new Promise<string>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: 'raw',
+          use_filename: true,
+          unique_filename: false,
+          format: 'pdf',
+        },
+        async (error, result) => {
+          if (error) {
+            console.error(error);
+            reject('Cloudinary upload error');
+          } else {
+            console.log(result?.secure_url);
+            resolve(result?.secure_url || '');
+          }
+        }
+      );
+
+      const readableStream = new Readable();
+      readableStream.push(bufferData);
+      readableStream.push(null);
+
+      readableStream.pipe(uploadStream);
+    });
+
+    const cloudinaryFileUrl = await uploadPromise;
+
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      throw new Error('Unauthorized');
+    }
+
+    const authorId = parseInt(session?.id);
+
+    const newExam = await prisma.exam.create({
+      data: {
+        title: title,
+        authorId: authorId,
+        createdById: authorId,
+        file: cloudinaryFileUrl,
+        level: ExamLevel[level as keyof typeof ExamLevel],
+        clusters: {
+          connect: { id: parseInt(category) },
+        },
+      },
+    });
+    revalidatePath(`/NewAdmin/Cluster/${category}`);
+    return newExam;
+  } catch (error) {
+    console.error(error, 'CREATING EXAM');
+  }
+};
+
+
+export const fetchStudentExamClusters = async (query:string) => {
+  'use server';
+
+  try{
+
+    if  (typeof query === 'string' && query.trim() !== '') {
+      const clusters = await prisma.cluster.findMany({
+        where: {
+          title: {
+            contains: query.trim(),
+          },
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.REVISION  
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      });
+      return clusters;
+    }
+
+    const clusters = await prisma.cluster.findMany(
+      {
+        where:{
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.REVISION
+
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      }
+    )
+      return clusters
+    
+
+  }catch(error){
+    console.error("Error fetching Exam Clusters",error)
+  }
+
+  
+};
+export const fetchStudentAssignmentClusters = async (query:string) => {
+  'use server';
+
+  try{
+
+    if  (typeof query === 'string' && query.trim() !== '') {
+      const clusters = await prisma.cluster.findMany({
+        where: {
+          title: {
+            contains: query.trim(),
+          },
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.ASSIGNMENT  
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      });
+
+      return clusters;
+    }
+
+    const clusters = await prisma.cluster.findMany(
+      {
+        where:{
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.ASSIGNMENT
+
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      }
+    )
+
+      return clusters
+    
+
+  }catch(error){
+    console.error("Error fetching Assignment Clusters",error)
+  }
+
+  
+};
+export const fetchStudentBookClusters = async (query:string) => {
+  'use server';
+
+  try{
+
+    if  (typeof query === 'string' && query.trim() !== '') {
+      const clusters = await prisma.cluster.findMany({
+        where: {
+          title: {
+            contains: query.trim(),
+          },
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.BOOK  
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      });
+      return clusters;
+    }
+
+    const clusters = await prisma.cluster.findMany(
+      {
+        where:{
+          visibility:ClusterVisibility.VISIBLE,
+          category:ExamCategory.BOOK
+
+        },
+        include: {
+          author: { 
+            select: {
+              firstName: true,
+              secondName: true,
+            },
+          },
+        },
+      }
+    )     
+
+      return clusters
+    
+
+  }catch(error){
+    console.error("Error fetching Book Clusters",error)
+  }
+
+  
+};
+
+
+export const createCluster = async (formData: FormData) => {
   try {
     const title = formData.get('title') as string;
-    const file = formData.get('file') as File | null;
+    const Visibility = formData.get('Visibility') as string | null;
     const category = formData.get('category') as string | null;
-    const type = formData.get('type') as string | null;
-    const level = formData.get('level') as string | null;
+    
 
-    if (!title || !file || !category || !level) {
+    if (!title || !Visibility || !category ) {
       throw new Error('Required field is missing');
     }
 
@@ -578,41 +894,19 @@ export const createExam = async (formData: FormData) => {
 
     const authorId = parseInt(session?.id);
 
-    const convertFileToBase64 = (file: File) => {
-      return new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          resolve((reader.result as string).split(',')[1] || '');
-        };
-        reader.readAsDataURL(file);
-      });
-    };
-
-    const fileBase64 = file ? await convertFileToBase64(file) : '';
-
-    if (fileBase64) {
-      const cloudinaryResponse = await cloudinary.uploader.upload(fileBase64, {
-        resource_type: 'auto',
-      });
-
-
-      console.log('DATA URL',cloudinaryResponse.secure_url)
-      const newExam = await prisma.exam.create({
+  
+      const newCluster = await prisma.cluster.create({
         data: {
-          title,
+          title:title,
           authorId: authorId,
-          createdById: authorId,
-          file: cloudinaryResponse.secure_url,
-          category: ExamCategory[type as keyof typeof ExamCategory],
-          level: ExamLevel[level as keyof typeof ExamLevel],
+          category:ExamCategory[category as keyof typeof ExamCategory],
+          visibility:ClusterVisibility[Visibility as keyof typeof ClusterVisibility ]
         },
       });
-
-      return newExam;
-    } else {
-      throw new Error('Error uploading file to Cloudinary');
-    }
+      revalidatePath('/NewAdmin/Cluster')
+      return newCluster;
+     
   } catch (error) {
-    console.error(error, 'CREATING PROJECT');
+    console.error(error, 'CREATING CLUSTER');
   }
-};
+}

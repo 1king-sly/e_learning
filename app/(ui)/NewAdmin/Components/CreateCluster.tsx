@@ -3,10 +3,8 @@ import React, { useEffect, useState } from 'react';
 import Button from '../../Button';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import SearchBar from '@/app/(ui)/Student/Component/SearchBar';
-import { fetchSingleCluster } from '@/app/lib/actions';
-import Link from 'next/link';
 import clsx from 'clsx';
+import { createCluster } from '@/app/lib/actions';
 
 
 
@@ -17,6 +15,7 @@ export default function CreateCluster() {
     const [formData, setFormData] = useState({
     title: '',
     Visibility: '',
+    category:'',
   });
 
   const router = useRouter();
@@ -42,28 +41,41 @@ export default function CreateCluster() {
     }
     event.preventDefault();
 
-    console.log(formData)
-
+    const formDataAsFormData = new FormData();
+    formDataAsFormData.append('title', formData.title);
+    formDataAsFormData.append('Visibility', formData.Visibility);
+    formDataAsFormData.append('category', formData.category);
     toast.loading('Creating Cluster .....')
 
     toggleLoading();
     try {
-      const create = await fetch('/api/createCluster', {
-        method: 'POST',
-        body:JSON.stringify(formData)
-        });
+      // const create = await fetch('/api/createCluster', {
+      //   method: 'POST',
+      //   body:JSON.stringify(formData)
+      //   });
 
-      if (create?.ok && create?.status === 200) {
+      const create = await createCluster(formDataAsFormData)
+
+      if(create){
         toast.dismiss()
+        toggleVisible()
         toast.success('Cluster Created Successfully')
-      } else if (create?.status !== 200) {
+      }else{
         toast.dismiss()
-        toast.error('Something Went wrong')
+        toast.error('Something went wrong')
       }
+
+      // if (create?.ok && create?.status === 200) {
+      //   toast.dismiss()
+      //   toggleVisible()
+      //   toast.success('Cluster Created Successfully')
+      // } else if (create?.status !== 200) {
+      //   toast.dismiss()
+      //   toast.error('Something Went wrong')
+      // }
 
     } catch (error) {
       toast.dismiss()
-
       toast.error('Server Side error')
     } finally {
       toggleLoading();
@@ -121,10 +133,30 @@ export default function CreateCluster() {
                    <option disabled value=''>
                    Choose Visibility
                   </option> 
-                  <option value='Hidden'>Hidden</option>
-                  <option value='Visible'>Visible</option>
+                  <option value='HIDDEN'>Hidden</option>
+                  <option value='VISIBLE'>Visible</option>
                 </select>
-              </label>     
+              </label>   
+
+
+              <label>
+                <select
+                  name='category'
+                  className='bg-white outline-sky-400 px-2 py-1 rounded-md w-80 text-gray-800 text-sm'
+                  required
+                  title='type'
+                  value={formData.category}
+                  onChange={handleChange}
+                  disabled={disabled}  
+                >
+                  <option disabled value=''>
+                    Type
+                  </option>
+                  <option value='REVISION'>REVISION</option>
+                  <option value='ASSIGNMENT'>ASSIGNMENT</option>
+                  <option value='BOOK'>BOOK</option>
+                </select>
+              </label>  
             
              
             </div>

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import pdf from '@/public/pdf.png';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
+import { createExam } from '@/app/lib/actions';
 
 
 
@@ -19,7 +20,6 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
       category: clusterId,
       level: '',
       file: null as { name: string, type: string, data: string } | null,
-      examType: '',
       imagePreview: null as string | null,
     });
   
@@ -44,26 +44,20 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
       }
       event.preventDefault();
   
-  
-    
       toggleLoading();
       try {
         toast.loading('Creating exam...');
-        const create = await fetch('/api/create', {
-          method: 'POST',
-          body: JSON.stringify(formData),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+      
+        const create = await createExam(formData)
     
-        if (create?.ok && create?.status === 200) {
-          toast.dismiss();
-          toast.success('Exam Created Successfully');
-          router.push('/NewAdmin/Dashboard');
-        } else if ( create?.status !== 200) {
-          toast.dismiss();
-          toast.error('Something went wrong');
+        if(create){
+          toast.dismiss()
+          toggleVisible()
+          toast.success('Exam created Successfully')
+        }
+        else{
+          toast.dismiss()
+          toast.error('Something went wrong')
         }
       } catch (error) {
         toast.dismiss();
@@ -73,9 +67,12 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
       }
     };
     
+    
     useEffect(() => {
       setDisabled(loading);
     }, [loading]);
+
+   
    
   
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement | HTMLInputElement>) => {
@@ -83,16 +80,17 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
     
       if (name === 'file' && files && files.length > 0) {
         const file = files[0];
-        
         const reader = new FileReader();
+    
         reader.onload = () => {
           const base64String = reader.result?.toString().split(',')[1];
+    
           setFormData({
             ...formData,
             file: {
-              name: file.name,      
+              name: file.name,
               type: file.type,
-              data: base64String || '',
+              data: base64String || '', 
             },
             imagePreview: reader.result as string,
           });
@@ -102,11 +100,12 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
       } else {
         setFormData({
           ...formData,
-          file: null,
           [name]: value,
         });
       }
     };
+    
+    
     
 
     const toggleVisible = () => {
@@ -136,24 +135,7 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
                 disabled={disabled}
               ></textarea>
 
-              <label>
-                <select
-                  name='examType'
-                  className='bg-white outline-sky-400 px-2 py-1 rounded-md w-80 text-gray-800 text-sm'
-                  required
-                  title='type'
-                  value={formData.examType}
-                  onChange={handleChange}
-                  disabled={disabled}  
-                >
-                  <option disabled value=''>
-                    Type
-                  </option>
-                  <option value='REVISION'>REVISION</option>
-                  <option value='ASSIGNMENT'>ASSIGNMENT</option>
-                  <option value='BOOK'>BOOK</option>
-                </select>
-              </label>
+              
               <label>
                 <select
                   name='level'
@@ -214,8 +196,7 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
                         type="file"
                         className="sr-only"
                         onChange={handleChange}
-                        disabled={disabled}
-                      />
+                        disabled={disabled}                   />
                     </label>
                     <p className="pl-1">or drag and drop</p>
                   </div>

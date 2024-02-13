@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: { email: string } }) {
 
           </label>
           <label >
-          <input type="text" name='registrationNumber' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user?.registrationNumber}/>
+          <input type="text" name='registrationNumber' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder='Password'/>
 
           </label>
              

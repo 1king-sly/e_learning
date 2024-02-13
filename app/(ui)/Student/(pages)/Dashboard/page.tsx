@@ -8,9 +8,7 @@ export default function DashboardPage() {
       <HelloSection></HelloSection>
       
       <Tables></Tables>
-      <Tables></Tables>
-      <Tables></Tables>
-      <Tables></Tables>
+     
       
 
     </>
