@@ -9,7 +9,7 @@ export default function ExamsPage() {
             <div className='mx-20 mt-10'>
                 <h1 className='text-4xl font-serif font-bold'>Exams</h1>
             </div>
-            <SearchBar></SearchBar>
+            <SearchBar placeholder='Search'></SearchBar>
 
             <Folder></Folder>
         </div>
