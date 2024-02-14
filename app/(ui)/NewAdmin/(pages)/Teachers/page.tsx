@@ -1,7 +1,7 @@
 'use server'
 import React from 'react'
 import SearchBar from '@/app/(ui)/Student/Component/SearchBar'
-import { fetchTeachers } from '@/app/lib/actions';
+import { fetchTeachers,deleteSingleUser } from '@/app/lib/actions';
 import ProfilePic from '@/public/images/ProfilePic.jpeg'
 import Image from 'next/image'
 import Link from 'next/link';
@@ -44,7 +44,9 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
                 </button>
               </Link>
 
-              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[8vw] flex items-center justify-center rounded-full mx-3'>
+              <form action={deleteSingleUser} className='w-[8vw]'>
+              <input type="text" title='userId' name='userId' className='hidden ' value={teacher.id}/>
+              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-full flex items-center justify-center rounded-full mx-3' type='submit'>
                 <div>
                   <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
                   <p className='hidden lg:block text-xs'>
@@ -52,6 +54,8 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
                   </p>
                 </div>
             </button>
+
+              </form>
           </div>
          </div>
             

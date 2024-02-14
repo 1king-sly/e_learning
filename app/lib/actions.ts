@@ -627,27 +627,44 @@ export const deleteSingleUser = async (formData: FormData) => {
   const userId = formData.get('userId') as string;
 
   try {
-    const projectsToDelete = await prisma.exam.findMany({
+    const examsToDelete = await prisma.exam.findMany({
       where: {
-        authorId: parseInt(userId),
-        createdById:parseInt(userId)
+        OR: [
+          { authorId: parseInt(userId) },
+          { createdById: parseInt(userId) },
+        ],
+      },
+      include: {
+        examOpenings: true,
       },
     });
 
+    const examOpeningIds = examsToDelete.flatMap((exam) =>
+      exam.examOpenings.map((opening) => opening.id)
+    );
 
-    // await Promise.all(projectsToDelete.map(async (project) => {
-    //   await prisma.exam.delete({
-    //     where: {
-    //     },
-    //   });
-    // }));
+    await prisma.examOpening.deleteMany({
+      where: {
+        id: {
+          in: examOpeningIds,
+        },
+      },
+    });
+
+    await prisma.exam.deleteMany({
+      where: {
+        OR: [
+          { authorId: parseInt(userId) },
+          { createdById: parseInt(userId) },
+        ],
+      },
+    });
 
     const deletedUser = await prisma.user.delete({
       where: {
         id: parseInt(userId),
       },
     });
-
 
     revalidatePath('/SuperAdmin/Users');
   } catch (error) {
@@ -659,23 +676,52 @@ export const deleteSingleUser = async (formData: FormData) => {
 export const deleteSingleExam = async (formData: FormData) => {
   'use server';
 
-
   const examId = formData.get('examId') as string;
 
-  try{
+  try {
+    const exam = await prisma.exam.findUnique({
+      where: {
+        id: parseInt(examId),
+      },
+      include: {
+        examOpenings: true,
+        clusters: true,
+      },
+    });
 
-      const deletedExam=await prisma.exam.delete({
-        where:{
-          id:parseInt(examId),
-        }
-      })
+    if (!exam) {
+      throw new Error('Exam not found');
+    }
 
-  }catch(error){
-    console.error("Error Deleting Exam",error)
+    
+    await prisma.examOpening.deleteMany({
+      where: {
+        examId: parseInt(examId),
+      },
+    });
+
+    await prisma.exam.update({
+      where: {
+        id: parseInt(examId),
+      },
+      data: {
+        clusters: {
+          disconnect: exam.clusters.map((cluster) => ({ id: cluster.id })),
+        },
+      },
+    });
+
+    const deletedExam = await prisma.exam.delete({
+      where: {
+        id: parseInt(examId),
+      },
+    });
+
+  } catch (error) {
+    console.error("Error Deleting Exam", error);
   }
-
-  
 };
+
 
 export const deleteSingleCluster = async (formData: FormData) => {
   'use server';

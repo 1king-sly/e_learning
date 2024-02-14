@@ -4,7 +4,7 @@ import SearchBar from '@/app/(ui)/Student/Component/SearchBar'
 import AddStudent from '../../Components/AddStudent'
 import Link from 'next/link'
 import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline'
-import { fetchStudents } from '@/app/lib/actions'
+import { fetchStudents,deleteSingleUser } from '@/app/lib/actions'
 
 export default async function StudentPage({searchParams}:{searchParams:string}) {
     const params = new URLSearchParams(searchParams);
@@ -44,14 +44,18 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
                                     </button>
                                 </Link>
 
-                                <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[8vw] flex items-center justify-center rounded-full mx-3'>
-                                    <div>
-                                    <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
-                                    <p className='hidden lg:block text-xs'>
-                                    Delete
-                                    </p>
-                                    </div>
-                                </button>
+                                <form action={deleteSingleUser} className='w-[8vw]'>
+              <input type="text" title='userId' name='userId' className='hidden ' value={student.id}/>
+              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-full flex items-center justify-center rounded-full mx-3' type='submit'>
+                <div>
+                  <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
+                  <p className='hidden lg:block text-xs'>
+                  Delete
+                  </p>
+                </div>
+            </button>
+
+              </form>
                             </div>
                          </tr>                            
                         ))}
