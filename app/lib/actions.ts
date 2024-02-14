@@ -9,6 +9,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/authUptions';
 import cloudinary from '@/utils/cloudinary';
 import { Readable } from 'stream';
+import { AnyARecord } from 'dns';
 
 
 
@@ -252,6 +253,7 @@ export const fetchSingleCluster = async (clusterId: string,query:string) => {
     console.error('Error fetching Single Cluster Exams', error);
   }
 };
+
 export const fetchSingleExam = async (examId:string) => {
   'use server';
     const user = await getServerSession(authOptions)
@@ -335,20 +337,17 @@ export const updateCluster = async (formData: FormData) => {
 
   }catch(error){
     console.error("Error Updating Project",error)
-  }
-  finally {
-    
-  }
-  
+  }  
 };
 
-export const updateUser = async (formData: FormData) => {
-  'use server';
-  const userId = formData.get('userId') as string;
-  const email = formData.get('email') as string | null;
-  const userType = formData.get('userType') as string | null;
-  const registrationNumber = formData.get('registrationNumber') as string | null;
-  const password = formData.get('password') as string | null;
+export const updateUser = async (formData: any) => {
+  const userId = formData.userId;
+  const email = formData.email;
+  const registrationNumber = formData.registrationNumber;
+  const password = formData.password;
+  const image = formData.file
+  const firstName = formData.firstName
+  const secondName = formData.secondName
 
   try {
     const data: Record<string, string> = {};
@@ -357,19 +356,56 @@ export const updateUser = async (formData: FormData) => {
     if (email !== null && email !== '') {
       data.email = email;
     }
+    if (firstName !== null && firstName !== '') {
+      data.firstName = email;
+    }
+    if (secondName !== null && secondName !== '') {
+      data.secondName = email;
+    }
     if (registrationNumber !== null && registrationNumber !== '') {
       data.registrationNumber = registrationNumber;
     }
-
-    if (userType !== null && userType !== '') {
-      data.userType = userType;
-    }
-
     if (password !== null && password !== '') {
       data.hashedPassword = await bcrypt.hash(password, 12);
     }
 
-    
+    if (image !== null) {
+      const { binary, type } = image;
+
+      const bufferData = Buffer.from(binary, 'base64');
+
+
+      const uploadPromise = new Promise<string>((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            resource_type: 'auto',
+            use_filename: true,
+            unique_filename: false,
+          },
+          async (error, result) => {
+            if (error) {
+              console.error(error);
+              reject('Cloudinary upload error');
+            } else {
+              resolve(result?.secure_url || '');
+            }
+          }
+        );
+  
+        const readableStream = new Readable();
+        readableStream.push(bufferData);
+        readableStream.push(null);
+  
+        readableStream.pipe(uploadStream);
+      });
+  
+      const cloudinaryFileUrl = await uploadPromise;
+
+      data.image = cloudinaryFileUrl
+
+
+    }
+
     const updatedUser = await prisma.user.update({
       where: {
         id: parseInt(userId),
@@ -377,7 +413,8 @@ export const updateUser = async (formData: FormData) => {
       data: data,
     });
 
-    revalidatePath(`/SuperAdmin/Users/${userId}`);
+    revalidatePath(`/NewAdmin/Student/${userId}`);
+    revalidatePath(`/NewAdmin/Teachers/${userId}`);
 
     return updatedUser;
   } catch (error) {
@@ -386,7 +423,7 @@ export const updateUser = async (formData: FormData) => {
   }
 };
 
-export const fetchUser = async (email:string) => {
+export const fetchUser = async (id:string) => {
   'use server';
 
 
@@ -395,7 +432,7 @@ export const fetchUser = async (email:string) => {
 
     const user = await prisma.user.findUnique({
       where: {
-        id: parseInt(email),
+        id: parseInt(id),
       },
       select: {
         id: true,
@@ -407,9 +444,9 @@ export const fetchUser = async (email:string) => {
         hashedPassword:true,
         exams:true,
         createdExams:true,
+        image:true,
       },
     });
-
 
     return user;
 
@@ -475,10 +512,13 @@ export const countTeachers = async () => {
 
 
 
-export const fetchStudents = async (query: string) => {
+export const fetchStudents = async (query: any) => {
+
   'use server'
+
+  const search = query as unknown as string
   try {
-    if (typeof query === 'string' && query.trim()) {
+    if (search && search.trim()) {
 
       const users = await prisma.user.findMany({
         where: {
@@ -488,16 +528,19 @@ export const fetchStudents = async (query: string) => {
           OR: [
             {
               registrationNumber: {
-                contains: query.trim(),
+                contains: search.trim(),
               },
             },
             {
               firstName: {
-                contains: query.trim(),
+                contains: search.trim(),
               },
             },
           ],
         },
+        orderBy:{
+          createdAt:'desc'
+        }
       });
       return users;
     }
@@ -508,6 +551,9 @@ export const fetchStudents = async (query: string) => {
           userType: {
             in: [UserType.STUDENT],
           }
+        },
+        orderBy:{
+          createdAt:'desc'
         }
       }
     );
@@ -518,28 +564,37 @@ export const fetchStudents = async (query: string) => {
     await prisma.$disconnect();
   }
 };
-export const fetchTeachers = async (query: string) => {
+export const fetchTeachers = async (query: any) => {
   'use server'
+  const search = query as unknown as string
   try {
-    if (typeof query === 'string' && query.trim()) {
+    if (search && search.trim()) {
       const users = await prisma.user.findMany({
         where: {
           userType: {
-            in: [UserType.TEACHER,UserType.ADMIN],
+            in: [UserType.TEACHER],
           }, 
           OR: [
             {
               registrationNumber: {
-                contains: query.trim(),
+                contains: search.trim(),
               },
             },
             {
               firstName: {
-                contains: query.trim(),
+                contains: search.trim(),
+              },
+            },
+            {
+              email: {
+                contains: search.trim(),
               },
             },
           ],
         },
+        orderBy:{
+          createdAt:'desc'
+        }
       });
       return users;
     }
@@ -550,6 +605,9 @@ export const fetchTeachers = async (query: string) => {
           userType: {
             in: [UserType.TEACHER,UserType.ADMIN],
           }
+        },
+        orderBy:{
+          createdAt:'desc'
         }
       }
     );
@@ -569,27 +627,44 @@ export const deleteSingleUser = async (formData: FormData) => {
   const userId = formData.get('userId') as string;
 
   try {
-    const projectsToDelete = await prisma.exam.findMany({
+    const examsToDelete = await prisma.exam.findMany({
       where: {
-        authorId: parseInt(userId),
-        createdById:parseInt(userId)
+        OR: [
+          { authorId: parseInt(userId) },
+          { createdById: parseInt(userId) },
+        ],
+      },
+      include: {
+        examOpenings: true,
       },
     });
 
+    const examOpeningIds = examsToDelete.flatMap((exam) =>
+      exam.examOpenings.map((opening) => opening.id)
+    );
 
-    // await Promise.all(projectsToDelete.map(async (project) => {
-    //   await prisma.exam.delete({
-    //     where: {
-    //     },
-    //   });
-    // }));
+    await prisma.examOpening.deleteMany({
+      where: {
+        id: {
+          in: examOpeningIds,
+        },
+      },
+    });
+
+    await prisma.exam.deleteMany({
+      where: {
+        OR: [
+          { authorId: parseInt(userId) },
+          { createdById: parseInt(userId) },
+        ],
+      },
+    });
 
     const deletedUser = await prisma.user.delete({
       where: {
         id: parseInt(userId),
       },
     });
-
 
     revalidatePath('/SuperAdmin/Users');
   } catch (error) {
@@ -601,44 +676,101 @@ export const deleteSingleUser = async (formData: FormData) => {
 export const deleteSingleExam = async (formData: FormData) => {
   'use server';
 
-
   const examId = formData.get('examId') as string;
 
-  try{
+  try {
+    const exam = await prisma.exam.findUnique({
+      where: {
+        id: parseInt(examId),
+      },
+      include: {
+        examOpenings: true,
+        clusters: true,
+      },
+    });
 
-      const deletedExam=await prisma.exam.delete({
-        where:{
-          id:parseInt(examId),
-        }
-      })
+    if (!exam) {
+      throw new Error('Exam not found');
+    }
 
-  }catch(error){
-    console.error("Error Deleting Exam",error)
+    
+    await prisma.examOpening.deleteMany({
+      where: {
+        examId: parseInt(examId),
+      },
+    });
+
+    await prisma.exam.update({
+      where: {
+        id: parseInt(examId),
+      },
+      data: {
+        clusters: {
+          disconnect: exam.clusters.map((cluster) => ({ id: cluster.id })),
+        },
+      },
+    });
+
+    const deletedExam = await prisma.exam.delete({
+      where: {
+        id: parseInt(examId),
+      },
+    });
+
+  } catch (error) {
+    console.error("Error Deleting Exam", error);
   }
-
-  
 };
+
 
 export const deleteSingleCluster = async (formData: FormData) => {
   'use server';
 
-
   const clusterId = formData.get('clusterId') as string;
 
-  try{
+  try {
+    const cluster = await prisma.cluster.findUnique({
+      where: {
+        id: parseInt(clusterId),
+      },
+      include: {
+        exams: true,
+      },
+    });
 
-      const deletedCluster=await prisma.cluster.delete({
-        where:{
-          id:parseInt(clusterId),
-        }
-      })
+    if (!cluster) {
+      throw new Error('Cluster not found');
+    }
 
-  }catch(error){
-    console.error("Error Deleting Cluster",error)
+    await Promise.all(cluster.exams.map(async (exam) => {
+      await prisma.examOpening.deleteMany({
+        where: {
+          examId: exam.id,
+        },
+      });
+    }));
+
+    await Promise.all(cluster.exams.map(async (exam) => {
+      await prisma.exam.delete({
+        where: {
+          id: exam.id,
+        },
+      });
+    }));
+
+    const deletedCluster = await prisma.cluster.delete({
+      where: {
+        id: parseInt(clusterId),
+      },
+    });
+
+    revalidatePath(`/NewAdmin/Cluster`)
+    return deletedCluster;
+  } catch (error) {
+    console.error('Error deleting cluster and associated exams:', error);
   }
-
-  
 };
+
 
 
 export const createExam = async (formData:any) => {
@@ -908,5 +1040,41 @@ export const createCluster = async (formData: FormData) => {
      
   } catch (error) {
     console.error(error, 'CREATING CLUSTER');
+  }
+}
+
+export const createUser = async (formData: any) => {
+  try {
+    const firstName = formData.FName;
+    const secondName = formData.SName
+    const regNo = formData.regNo
+    let email = formData.email
+    const userType = formData.userType
+
+    if(!email){
+      email = regNo+'@gmail.com'
+    }
+    
+
+    if (!firstName || !secondName || !regNo || !email ) {
+      throw new Error('Required field is missing');
+    }    
+    const hashedPassword = await bcrypt.hash(email, 12);  
+    const newUser = await prisma.user.create({
+      data: {
+        firstName:firstName,
+        secondName:secondName,
+        email:email,
+        registrationNumber:regNo,
+        userType:UserType[userType as  keyof typeof UserType],
+        hashedPassword:hashedPassword,
+    },
+    });
+      revalidatePath('/NewAdmin/Students')
+      revalidatePath('/NewAdmin/Teachers')
+      return newUser;
+     
+  } catch (error) {
+    console.error(error, 'CREATING USER');
   }
 }

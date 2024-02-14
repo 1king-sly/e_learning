@@ -1,16 +1,79 @@
 'use client'
-import React, {useState} from 'react'
+import { createUser } from '@/app/lib/actions';
 import clsx from 'clsx'
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
+
 
 export default function AddStudent() {
-    const [visible,setVisible]= useState(false)
+    const [visible, setVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [disabled, setDisabled] = useState(false);
+    const [formData, setFormData] = useState({
+    FName: '',
+    SName: '',
+    regNo:'',
+    userType:'STUDENT'
+  });
 
+  const toggleLoading = () => {
+    setLoading((prevLoading) => !prevLoading);
+  };
     const toggleVisible = () => {
         setVisible((prev) => !prev)
     }
+
+    const handleChange = (event: React.ChangeEvent< HTMLTextAreaElement | HTMLSelectElement|HTMLInputElement>) => {
+        const { name, value } = event.target;
+       {
+          setFormData({
+            ...formData,
+            [name]: value,
+          });
+        }
+      };
+    
+      const handleSubmit = async () => {
+        const event = window.event;
+        if (!event) {
+          return;
+        }
+        event.preventDefault();
+    
+       
+        toast.loading('Creating User .....')
+    
+        toggleLoading();
+        try {
+          
+    
+          const create = await createUser(formData)
+    
+          if(create){
+            toast.dismiss()
+            toggleVisible()
+            toast.success('User Created Successfully')
+          }else{
+            toast.dismiss()
+            toast.error('Something went wrong')
+          }
+    
+         
+        } catch (error) {
+          toast.dismiss()
+          toast.error('Server Side error')
+        } finally {
+          toggleLoading();
+        }
+      };
+    
+      useEffect(() => {
+        setDisabled(loading);
+      }, [loading]);
   return (
     <>
-        {/* <div className='w-full flex justify-center'> */}
+        
             <div className='w-full flex justify-between'>
                 <div className=' mx-20 mt-10'>
                     <h1 className='text-4xl font-serif font-bold'>Students</h1>
@@ -20,10 +83,21 @@ export default function AddStudent() {
                 </div>
             </div>
         <div className={clsx(`px-20 py-10 flex flex-row gap-2 w-full justify-evenly `, !visible && 'hidden')}>
-            <input placeholder='First Name' className='rounded p-2'></input>
-            <input placeholder='Second Name' className='rounded p-2'></input>
-            <input placeholder='Admission Number' className='rounded p-2'></input>
-        {/* </div> */}
+            <input placeholder='First Name' className='rounded p-2' name='FName'
+            value={formData.FName}
+            onChange={handleChange}></input>
+            <input placeholder='Second Name' className='rounded p-2' name='SName'
+            value={formData.SName}
+            onChange={handleChange}></input>
+            <input placeholder='Admission Number' className='rounded p-2' name='regNo'
+            value={formData.regNo}
+            onChange={handleChange}></input>
+        </div>
+        
+
+        <div className={clsx(`px-20  w-full flex justify-end `, !visible && 'hidden')}>
+            <button className='text-white bg-sky-300 rounded-md p-1'  onClick={handleSubmit}
+              disabled={disabled}>Create</button>
         </div>
     </>
     )

@@ -6,11 +6,17 @@ import profile from '@/public/images/ProfilePic.jpeg'
 import { fetchUser, updateUser,fetchUserCreatedExams } from '@/app/lib/actions';
 
 import Link from 'next/link';
+import NotFound from './not-found';
+import ProfileForm from '../../../Components/ProfileForm';
 
 export default async function Page({ params }: { params: { email: string } }) {  
     const userEmail = params.email
     
     const user = await fetchUser(userEmail)
+    if(!user){
+      return <NotFound/>
+
+    }
 
     const exams = await fetchUserCreatedExams(user?.id)
 
@@ -18,39 +24,8 @@ export default async function Page({ params }: { params: { email: string } }) {
     <>
        <div className='w-full h-full flex items-center justify-center '>
         <div className='w-1/3'>
-        <div className='shadow-lg rounded-md flex flex-col w-96 h-96  items-center justify-center'>
-        <div className=' h-24 flex items-center justify-center  gap-4 px-2'>
-          <Image className='h-20 w-20 rounded-full shadow-md' src={ profile} alt='profile'></Image>         
-        </div>
-
-        <form action={updateUser}>
-        <div className=' gap-3 flex flex-col ' >
-          <label >
-          <input type="text"  className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user?.firstName + " " + user?.secondName} />
-          <input type="text"  className='hidden ' value={userEmail} name='userId' />
-
-          </label>
-          <label >
-          <input type="email" name='email' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user?.email}/>
-
-          </label>
-          <label >
-          <input type="text" name='registrationNumber' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user?.registrationNumber}/>
-
-          </label>
-             
-
-          <label >
-          <input type="text" name='password' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder='password'/>
-
-          </label>
-        </div>
-        <div className='mt-2 w-[236px] '>
         
-        </div>
-       
-        </form>
-      </div>
+        <ProfileForm user ={user}/>
         </div>
 
         <div className='flex flex-1 '>

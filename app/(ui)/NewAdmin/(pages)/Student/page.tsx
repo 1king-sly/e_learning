@@ -4,7 +4,7 @@ import SearchBar from '@/app/(ui)/Student/Component/SearchBar'
 import AddStudent from '../../Components/AddStudent'
 import Link from 'next/link'
 import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline'
-import { fetchStudents } from '@/app/lib/actions'
+import { fetchStudents,deleteSingleUser } from '@/app/lib/actions'
 
 export default async function StudentPage({searchParams}:{searchParams:string}) {
     const params = new URLSearchParams(searchParams);
@@ -14,7 +14,9 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
   return (
     <>
         <div>
-            <AddStudent></AddStudent>            
+            <AddStudent></AddStudent>
+          
+            
             <SearchBar placeholder='Search'></SearchBar>
 
 
@@ -24,19 +26,19 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
                     <tbody className='flex flex-col w-full gap-3'>
                         {students?.map((student)=>(
 
-                <tr className='bg-gray-100 bg-opacity-65' >
-                        <td className='w-1/4 pl-5 pr-32'>{student.firstName}</td>
-                        <td className='w-1/4 px-32'>{student.registrationNumber}</td>
-                        <td className='w-1/4 px-32'>{student.email} </td>
-                        
-
-                        <Link href={`/NewAdmin/Student/${student.id}`} key={student.id}>
-                        <td className='w-1/12 mx-4' >
-                        <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full w-[6vw]'>
-                            <div>
-                            <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
-                            <p className='hidden lg:block text-xs'>
-                                View
+                <tr className='bg-gray-100 bg-opacity-65'  key={student.id} >
+                             <td className='w-1/4 pl-5 pr-32'>{student.firstName}</td>
+                             <td className='w-1/4 px-32'>{student.registrationNumber}</td>
+                             <td className='w-1/4 px-32'>{student.email} </td>
+                             
+                            
+                                <Link href={`/NewAdmin/Student/${student.id}`} key={student.id}>
+                                <td className='w-1/12 mx-4' >
+                                <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full w-[6vw]'>
+                                    <div>
+                                        <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
+                                        <p className='hidden lg:block text-xs'>
+                                        View
 
                             </p>
                             </div>
