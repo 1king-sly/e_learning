@@ -1,6 +1,6 @@
 'use server'
 import SearchBar from '@/app/(ui)/Student/Component/SearchBar';
-import { fetchSingleCluster } from '@/app/lib/actions';
+import { deleteSingleExam, fetchSingleCluster } from '@/app/lib/actions';
 import Link from 'next/link';
 import CreateExam from '../../Components/CreateExam';
 import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
@@ -38,8 +38,8 @@ export default async function Page({ params,searchParams }: { params: { id: stri
                       </td>
                       </Link>
                       <td className='w-1/12 mx-4' >
-                        <form action={''} className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-full flex items-center justify-center rounded-full'>
-                        <input type="text" hidden value='' name='projectId' />
+                        <form action={deleteSingleExam} className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-full flex items-center justify-center rounded-full'>
+                        <input type="text" hidden value={exam.id} name='projectId' />
                       <button>
                         <div>
                           <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
