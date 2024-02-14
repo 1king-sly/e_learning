@@ -26,7 +26,7 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
                     <tbody className='flex flex-col w-full gap-3'>
                         {students?.map((student)=>(
 
-                <tr className='bg-gray-100 bg-opacity-65'  key={student.id} >
+                <tr className='bg-gray-100 bg-opacity-65 flex w-full justify-between px-4'  key={student.id} >
                              <td className='w-1/4 pl-5 pr-32'>{student.firstName}</td>
                              <td className='w-1/4 px-32'>{student.registrationNumber}</td>
                              <td className='w-1/4 px-32'>{student.email} </td>
@@ -46,8 +46,8 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
                         </td>
                         </Link>
                         <td className='w-1/12 mx-4' >
-                            <form action={''} className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[6vw] flex items-center justify-center rounded-full'>
-                            <input type="text" hidden value='' name='projectId' />
+                            <form action={deleteSingleUser} className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[6vw] flex items-center justify-center rounded-full'>
+                            <input type="text" hidden value={student.id} name='projectId' />
                         <button>
                             <div>
                             <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
