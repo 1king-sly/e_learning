@@ -49,10 +49,7 @@ export default function CreateCluster() {
 
     toggleLoading();
     try {
-      // const create = await fetch('/api/createCluster', {
-      //   method: 'POST',
-      //   body:JSON.stringify(formData)
-      //   });
+     
 
       const create = await createCluster(formDataAsFormData)
 
@@ -65,14 +62,7 @@ export default function CreateCluster() {
         toast.error('Something went wrong')
       }
 
-      // if (create?.ok && create?.status === 200) {
-      //   toast.dismiss()
-      //   toggleVisible()
-      //   toast.success('Cluster Created Successfully')
-      // } else if (create?.status !== 200) {
-      //   toast.dismiss()
-      //   toast.error('Something Went wrong')
-      // }
+     
 
     } catch (error) {
       toast.dismiss()

@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     
     const exam = await fetchSingleExam(id)
     if(!exam){
-        return <NotFound/>
+      return <NotFound/>
     }
 
   return (

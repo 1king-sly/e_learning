@@ -135,16 +135,16 @@ export default function ProfileForm({user}:{user:any})
         <form action=''>
         <div className=' gap-3 flex flex-col ' >
           <label >
-          <input type="text"  className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user.firstName } name='firstName' onChange={handleChange} />
+          <input type="text"  className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user.firstName } name='firstName'  disabled />
          
           <input type="text"  className='hidden ' value={user?.id} name='userId' />
 
           </label>
           <label>
-          <input type="text"  className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={ user.secondName} name='secondName' onChange={handleChange}/>
+          <input type="text"  className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={ user.secondName} name='secondName' disabled/>
           </label>
           <label >
-          <input type="text" name='registrationNumber' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user.registrationNumber} onChange={handleChange}/>
+          <input type="text" name='registrationNumber' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user.registrationNumber} disabled/>
 
           </label>
 
