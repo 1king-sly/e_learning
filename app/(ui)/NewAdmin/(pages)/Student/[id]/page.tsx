@@ -6,10 +6,10 @@ import profile from '@/public/images/ProfilePic.jpeg'
 import { fetchUser, updateUser } from '@/app/lib/actions';
 import {  redirect } from 'next/navigation';
 
-export default async function Page({ params }: { params: { email: string } }) {  
-    const userEmail = params.email
+export default async function Page({ params }: { params: { id: string } }) {  
+    const userId = params.id
     
-    const user = await fetchUser(userEmail)
+    const user = await fetchUser(userId)
 
   return (
     <>
@@ -23,13 +23,15 @@ export default async function Page({ params }: { params: { email: string } }) {
         <div className=' gap-3 flex flex-col ' >
           <label >
           <input type="text"  className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user?.firstName + " " + user?.secondName} />
-          <input type="text"  className='hidden ' value={userEmail} name='userId' />
+          <input type="text"  className='hidden ' value={userId} name='userId' />
 
           </label>
           <label >
-          <input type="email" name='email' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user?.email}/>
+          <input type="text" name='registrationNumber' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user?.registrationNumber}/>
 
           </label>
+
+
           <label >
           <input type="text" name='registrationNumber' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder='Password'/>
 

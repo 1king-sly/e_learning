@@ -9,6 +9,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/authUptions';
 import cloudinary from '@/utils/cloudinary';
 import { Readable } from 'stream';
+import { AnyARecord } from 'dns';
 
 
 
@@ -386,16 +387,17 @@ export const updateUser = async (formData: FormData) => {
   }
 };
 
-export const fetchUser = async (email:string) => {
+export const fetchUser = async (id:string) => {
   'use server';
 
+  console.log(id)
 
   try{
 
 
     const user = await prisma.user.findUnique({
       where: {
-        id: parseInt(email),
+        id: parseInt(id),
       },
       select: {
         id: true,
@@ -498,6 +500,9 @@ export const fetchStudents = async (query: string) => {
             },
           ],
         },
+        orderBy:{
+          createdAt:'desc'
+        }
       });
       return users;
     }
@@ -508,6 +513,9 @@ export const fetchStudents = async (query: string) => {
           userType: {
             in: [UserType.STUDENT],
           }
+        },
+        orderBy:{
+          createdAt:'desc'
         }
       }
     );
@@ -525,7 +533,7 @@ export const fetchTeachers = async (query: string) => {
       const users = await prisma.user.findMany({
         where: {
           userType: {
-            in: [UserType.TEACHER,UserType.ADMIN],
+            in: [UserType.TEACHER],
           }, 
           OR: [
             {
@@ -540,6 +548,9 @@ export const fetchTeachers = async (query: string) => {
             },
           ],
         },
+        orderBy:{
+          createdAt:'desc'
+        }
       });
       return users;
     }
@@ -550,6 +561,9 @@ export const fetchTeachers = async (query: string) => {
           userType: {
             in: [UserType.TEACHER,UserType.ADMIN],
           }
+        },
+        orderBy:{
+          createdAt:'desc'
         }
       }
     );
@@ -908,5 +922,41 @@ export const createCluster = async (formData: FormData) => {
      
   } catch (error) {
     console.error(error, 'CREATING CLUSTER');
+  }
+}
+
+export const createUser = async (formData: any) => {
+  try {
+    const firstName = formData.FName;
+    const secondName = formData.SName
+    const regNo = formData.regNo
+    let email = formData.email
+    const userType = formData.userType
+
+    if(!email){
+      email = regNo+'@gmail.com'
+    }
+    
+
+    if (!firstName || !secondName || !regNo || !email ) {
+      throw new Error('Required field is missing');
+    }    
+    const hashedPassword = await bcrypt.hash(email, 12);  
+    const newUser = await prisma.user.create({
+      data: {
+        firstName:firstName,
+        secondName:secondName,
+        email:email,
+        registrationNumber:regNo,
+        userType:UserType[userType as  keyof typeof UserType],
+        hashedPassword:hashedPassword,
+    },
+    });
+      revalidatePath('/NewAdmin/Students')
+      revalidatePath('/NewAdmin/Teachers')
+      return newUser;
+     
+  } catch (error) {
+    console.error(error, 'CREATING USER');
   }
 }

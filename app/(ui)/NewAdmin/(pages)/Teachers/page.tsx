@@ -15,14 +15,7 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
   return (
     <>  
         <AddTeacher></AddTeacher>
-        {/* <div className='flex flex-row justify-between'>
-            <div className='mx-20 mt-10'>
-                <h1 className='text-4xl font-serif font-bold'>Teachers</h1>
-            </div>
-            <div className='mt-10 mx-20 cursor-pointer'>
-                <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 12.5H6v-1h5.5V6h1v5.5H18v1h-5.5V18h-1z"/></svg>
-            </div>
-        </div> */}
+        
         
         <SearchBar placeholder='search'></SearchBar>
         
@@ -36,7 +29,7 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
              <h1 className='p-2 text-sm'>
               {teacher.email}
              </h1>
-             <h1 className='p-2 text-sm'>0711 111 111</h1>
+             <h1 className='p-2 text-sm'>{teacher?.registrationNumber} </h1>
          </div>
             
             </Link>
