@@ -1,17 +1,18 @@
+'use server'
 import React from 'react'
-import ProfileIcon from '../../Component/ProfileIcon'
-import ProfileForm from '../../Component/ProfileForm'
+import { authOptions } from '@/utils/authUptions'
+import { getServerSession } from 'next-auth'
+import ProfileForm from '@/app/(ui)/NewAdmin/Components/ProfileForm'
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+    const user = await getServerSession(authOptions)
   return (
         <>
-            <div>
+            <div className='w-full h-full flex flex-col items-center justify-center '>
                 <div className='mx-20 mt-10'>
                     <h1 className='text-4xl font-serif font-bold'>Profile Page</h1>
                 </div>
-                <ProfileIcon></ProfileIcon>
-
-                <ProfileForm></ProfileForm>
+                <ProfileForm user={user}></ProfileForm>
             </div>
         </>
     )
