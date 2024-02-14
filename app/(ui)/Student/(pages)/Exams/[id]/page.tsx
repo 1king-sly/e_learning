@@ -2,6 +2,7 @@
 import React from 'react';
 import {  fetchSingleExam } from '@/app/lib/actions';
 import DocumentViewer from '@/app/(ui)/DocumentViewer';
+import NotFound from './not-found';
 
 
 export default async function Page({ params }: { params: { id: string } }) {  
@@ -10,7 +11,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     
     const exam = await fetchSingleExam(id)
     if(!exam){
-        return null
+      return <NotFound/>
     }
 
   return (

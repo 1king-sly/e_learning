@@ -340,13 +340,13 @@ export const updateCluster = async (formData: FormData) => {
 };
 
 export const updateUser = async (formData: any) => {
-  'use server';
   const userId = formData.userId;
   const email = formData.email;
-  const userType = formData.userType;
   const registrationNumber = formData.registrationNumber;
   const password = formData.password;
   const image = formData.file
+  const firstName = formData.firstName
+  const secondName = formData.secondName
 
   try {
     const data: Record<string, string> = {};
@@ -355,22 +355,23 @@ export const updateUser = async (formData: any) => {
     if (email !== null && email !== '') {
       data.email = email;
     }
+    if (firstName !== null && firstName !== '') {
+      data.firstName = email;
+    }
+    if (secondName !== null && secondName !== '') {
+      data.secondName = email;
+    }
     if (registrationNumber !== null && registrationNumber !== '') {
       data.registrationNumber = registrationNumber;
     }
-
-    if (userType !== null && userType !== '') {
-      data.userType = userType;
-    }
-
     if (password !== null && password !== '') {
       data.hashedPassword = await bcrypt.hash(password, 12);
     }
 
-    if (image !== null && image !== '') {
-      const { data, type } = image;
+    if (image !== null) {
+      const { binary, type } = image;
 
-      const bufferData = Buffer.from(data, 'base64');
+      const bufferData = Buffer.from(binary, 'base64');
 
 
       const uploadPromise = new Promise<string>((resolve, reject) => {
@@ -385,7 +386,6 @@ export const updateUser = async (formData: any) => {
               console.error(error);
               reject('Cloudinary upload error');
             } else {
-              console.log(result?.secure_url);
               resolve(result?.secure_url || '');
             }
           }
@@ -402,9 +402,9 @@ export const updateUser = async (formData: any) => {
 
       data.image = cloudinaryFileUrl
 
+
     }
 
-    
     const updatedUser = await prisma.user.update({
       where: {
         id: parseInt(userId),
@@ -443,10 +443,11 @@ export const fetchUser = async (id:string) => {
         hashedPassword:true,
         exams:true,
         createdExams:true,
+        image:true,
       },
     });
 
-
+    console.log(user)
     return user;
 
   }catch(error){

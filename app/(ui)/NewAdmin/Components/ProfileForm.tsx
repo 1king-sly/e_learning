@@ -18,10 +18,10 @@ export default function ProfileForm({user}:{user:any})
       firstName: '',
       secondName: '',
       password: '',
-      file: null as { name: string, type: string, data: string } | null,
+      file: null as { name: string, type: string, binary: string } | null,
       imagePreview: null as string | null,
       registrationNumber:'',
-      userId:''
+      userId:user.id
     });
   
     const toggleLoading = () => {
@@ -89,7 +89,7 @@ export default function ProfileForm({user}:{user:any})
             file: {
               name: file.name,
               type: file.type,
-              data: base64String || '', 
+              binary: base64String || '', 
             },
             imagePreview: reader.result as string,
           });
@@ -112,25 +112,24 @@ export default function ProfileForm({user}:{user:any})
     <>
          <div className='shadow-lg rounded-md flex flex-col w-96 h-96  items-center justify-center'>
         <div className=' h-24 flex items-center justify-center  gap-4 px-2'>
-            <label htmlFor="file-upload">
-            
-            <Image className='h-20 w-20 rounded-full shadow-md' src={ profile || formData.imagePreview || user.image} alt='profile'></Image> 
-
-            <span>upload Image
-            </span>
-
-              
-
-           <input
-                        id="file-upload"
-                        name="file"
-                        type="image"
-                        className="sr-only"
-                        title='File upload'
-                        onChange={handleChange}
-                                        
-            />  
-            </label>
+        <label htmlFor="file-upload">
+  <div className='h-20 w-20 rounded-full shadow-md overflow-hidden relative'>
+    <Image 
+      src={ formData.imagePreview || user.image || profile} 
+      alt='profile'
+      layout="fill"
+      objectFit="cover"
+    />
+  </div>
+</label>
+<input
+  id="file-upload"
+  name="file"
+  type="file"
+  className="sr-only"
+  title='File upload'
+  onChange={handleChange}
+/>
         </div>
 
         <form action=''>
