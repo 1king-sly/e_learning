@@ -1,5 +1,6 @@
 'use server'
 import SearchBar from '@/app/(ui)/Student/Component/SearchBar';
+
 import { fetchSingleCluster,deleteSingleExam } from '@/app/lib/actions';
 import Link from 'next/link';
 import CreateExam from '../../Components/CreateExam';
@@ -38,6 +39,7 @@ export default async function Page({ params,searchParams }: { params: { id: stri
                       </td>
                       </Link>
                       <td className='w-1/12 mx-4' >
+
                       <form action={deleteSingleExam} className=''>
               <input type="text" title='examId' name='examId' className='hidden ' value={exam.id}/>
               <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-full flex items-center justify-center rounded-full mx-3' type='submit'>
