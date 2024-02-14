@@ -1,33 +1,170 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image'
+import profile from '@/public/images/ProfilePic.jpeg'
+import Button from '@/app/(ui)/Button';
+import { useRouter } from 'next/navigation';
+import pdf from '@/public/pdf.png';
+import toast from 'react-hot-toast';
+import clsx from 'clsx';
+import { updateUser } from '@/app/lib/actions';
 
-export default function ProfileForm() {
+export default function ProfileForm({user}:{user:any})
+
+{  
+    const [loading, setisLoading] = useState(false);
+    const [disabled, setDisabled] = useState(false);
+    const [formData, setFormData] = useState({
+      firstName: '',
+      secondName: '',
+      password: '',
+      file: null as { name: string, type: string, data: string } | null,
+      imagePreview: null as string | null,
+      registrationNumber:'',
+      userId:''
+    });
+  
+    const toggleLoading = () => {
+      setisLoading((prevLoading) => !prevLoading);
+    };
+  
+   
+  
+    const router = useRouter()
+  
+   
+  
+    
+  
+  
+    const handleSubmit = async () => {
+      const event = window.event;
+      if (!event) {
+        return;
+      }
+      event.preventDefault();
+  
+      toggleLoading();
+      try {
+        toast.loading('Updating user...');
+      
+        const create = await updateUser(formData)
+    
+        if(create){
+          toast.dismiss()
+          toast.success('User updated Successfully')
+        }
+        else{
+          toast.dismiss()
+          toast.error('Something went wrong')
+        }
+      } catch (error) {
+        toast.dismiss();
+        toast.error('Server Side error');
+      } finally {
+        toggleLoading();
+      }
+    };
+    
+    
+    useEffect(() => {
+      setDisabled(loading);
+    }, [loading]);
+
+   
+   
+  
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement | HTMLInputElement>) => {
+      const { name, value, files } = event.target as HTMLInputElement;
+    
+      if (name === 'file' && files && files.length > 0) {
+        const file = files[0];
+        const reader = new FileReader();
+    
+        reader.onload = () => {
+          const base64String = reader.result?.toString().split(',')[1];
+    
+          setFormData({
+            ...formData,
+            file: {
+              name: file.name,
+              type: file.type,
+              data: base64String || '', 
+            },
+            imagePreview: reader.result as string,
+          });
+        };
+    
+        reader.readAsDataURL(file);
+      } else {
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+      }
+    };
+    
+    
+    
+
+    
   return (
     <>
-        <div className='text-xl'>
-            <div className='flex justify-center gap-10 my-6'>
-                <h1 className='mr-10'>Full Name</h1>
-                <input type='text' placeholder='Full Name'/>
-            </div>
-            <div className='flex justify-center gap-10 my-6'>
-                <h1 className='mr-3'>TSC Number</h1>
-                <input type='text' placeholder='TSC Number'/>
-            </div>
-            <div className='flex justify-center gap-10 my-6'>
-                <h1 className='mr-20'>Email</h1>
-                <input type='text' placeholder='Email'/>
-            </div>
-            <div className='flex justify-center gap-9 my-6'>
-                <h1 className='mr-20'>Gender</h1>
-                <input type='radio' name='Gender' value='Male' title='gender'></input>
-                <label>Male</label>
-                <input type='radio' name='Gender' value='Female' title='gender'></input>
-                <label>Female</label>
-            </div>
-            <div className='flex justify-center'>
-                <button type='submit' className='mx-20 border-2 border-black px-4 rounded-lg'>Save</button>
-                <button type='submit' className='mx-20 border-2 border-black px-4 rounded-lg'>Cancel</button>
-            </div>
+         <div className='shadow-lg rounded-md flex flex-col w-96 h-96  items-center justify-center'>
+        <div className=' h-24 flex items-center justify-center  gap-4 px-2'>
+            <label htmlFor="file-upload">
+            
+            <Image className='h-20 w-20 rounded-full shadow-md' src={ profile || formData.imagePreview || user.image} alt='profile'></Image> 
+
+            <span>upload Image
+            </span>
+
+              
+
+           <input
+                        id="file-upload"
+                        name="file"
+                        type="image"
+                        className="sr-only"
+                        title='File upload'
+                        onChange={handleChange}
+                                        
+            />  
+            </label>
         </div>
+
+        <form action=''>
+        <div className=' gap-3 flex flex-col ' >
+          <label >
+          <input type="text"  className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user.firstName } name='firstName' onChange={handleChange} />
+         
+          <input type="text"  className='hidden ' value={user?.id} name='userId' />
+
+          </label>
+          <label>
+          <input type="text"  className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={ user.secondName} name='secondName' onChange={handleChange}/>
+          </label>
+          <label >
+          <input type="text" name='registrationNumber' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder={user.registrationNumber} onChange={handleChange}/>
+
+          </label>
+
+
+          <label >
+          <input type="text" name='password' className='bg-white outline-sky-400 px-2 py-1 rounded-md ' placeholder='Password'onChange={handleChange}/>
+
+          </label>
+             
+        </div>
+        <div className='mt-2 w-full flex justify-center '>
+            <button className='w-4/5 text-white bg-sky-300 rounded-md p-1'  onClick={handleSubmit}
+              disabled={disabled}>Update</button>
+        
+        </div>
+       
+        </form>
+
+      </div>
     </>
   )
 }

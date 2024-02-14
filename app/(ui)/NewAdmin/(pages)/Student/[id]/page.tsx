@@ -5,6 +5,7 @@ import Image from 'next/image'
 import profile from '@/public/images/ProfilePic.jpeg'
 import { fetchUser, updateUser } from '@/app/lib/actions';
 import {  redirect } from 'next/navigation';
+import ProfileForm from '../../../Components/ProfileForm';
 
 export default async function Page({ params }: { params: { id: string } }) {  
     const userId = params.id
@@ -14,7 +15,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <>
        <div className='w-full h-full flex items-center justify-center '>
-      <div className='shadow-lg rounded-md flex flex-col w-96 h-96  items-center justify-center'>
+      {/* <div className='shadow-lg rounded-md flex flex-col w-96 h-96  items-center justify-center'>
         <div className=' h-24 flex items-center justify-center  gap-4 px-2'>
           <Image className='h-20 w-20 rounded-full shadow-md' src={ profile} alt='profile'></Image>         
         </div>
@@ -53,8 +54,9 @@ export default async function Page({ params }: { params: { id: string } }) {
         
 
 
-      </div>
+      </div> */}
 
+      <ProfileForm user={user}/>
       
 
     </div>

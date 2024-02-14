@@ -23,7 +23,6 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
       imagePreview: null as string | null,
     });
   
-    const [filePreview, setFilePreview] = useState(null);
     const toggleLoading = () => {
       setisLoading((prevLoading) => !prevLoading);
     };

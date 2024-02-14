@@ -339,13 +339,14 @@ export const updateCluster = async (formData: FormData) => {
   }  
 };
 
-export const updateUser = async (formData: FormData) => {
+export const updateUser = async (formData: any) => {
   'use server';
-  const userId = formData.get('userId') as string;
-  const email = formData.get('email') as string | null;
-  const userType = formData.get('userType') as string | null;
-  const registrationNumber = formData.get('registrationNumber') as string | null;
-  const password = formData.get('password') as string | null;
+  const userId = formData.userId;
+  const email = formData.email;
+  const userType = formData.userType;
+  const registrationNumber = formData.registrationNumber;
+  const password = formData.password;
+  const image = formData.file
 
   try {
     const data: Record<string, string> = {};
@@ -366,6 +367,43 @@ export const updateUser = async (formData: FormData) => {
       data.hashedPassword = await bcrypt.hash(password, 12);
     }
 
+    if (image !== null && image !== '') {
+      const { data, type } = image;
+
+      const bufferData = Buffer.from(data, 'base64');
+
+
+      const uploadPromise = new Promise<string>((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            resource_type: 'auto',
+            use_filename: true,
+            unique_filename: false,
+          },
+          async (error, result) => {
+            if (error) {
+              console.error(error);
+              reject('Cloudinary upload error');
+            } else {
+              console.log(result?.secure_url);
+              resolve(result?.secure_url || '');
+            }
+          }
+        );
+  
+        const readableStream = new Readable();
+        readableStream.push(bufferData);
+        readableStream.push(null);
+  
+        readableStream.pipe(uploadStream);
+      });
+  
+      const cloudinaryFileUrl = await uploadPromise;
+
+      data.image = cloudinaryFileUrl
+
+    }
+
     
     const updatedUser = await prisma.user.update({
       where: {
@@ -374,7 +412,8 @@ export const updateUser = async (formData: FormData) => {
       data: data,
     });
 
-    revalidatePath(`/SuperAdmin/Users/${userId}`);
+    revalidatePath(`/NewAdmin/Student/${userId}`);
+    revalidatePath(`/NewAdmin/Teachers/${userId}`);
 
     return updatedUser;
   } catch (error) {
@@ -386,7 +425,6 @@ export const updateUser = async (formData: FormData) => {
 export const fetchUser = async (id:string) => {
   'use server';
 
-  console.log(id)
 
   try{
 
