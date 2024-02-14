@@ -3,7 +3,7 @@ import React from 'react'
 import SearchBar from '@/app/(ui)/Student/Component/SearchBar'
 import AddStudent from '../../Components/AddStudent'
 import Link from 'next/link'
-
+import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline'
 import { fetchStudents } from '@/app/lib/actions'
 
 export default async function StudentPage({searchParams}:{searchParams:string}) {
@@ -14,17 +14,7 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
   return (
     <>
         <div>
-            <AddStudent></AddStudent>
-            {/* <div className='flex flex-row justify-between'>
-            <div className='mx-20 mt-10'>
-                <h1 className='text-4xl font-serif font-bold'>Students</h1>
-            </div>
-            <Link href='/NewAdmin/Students'>
-            <div className='mt-10 mx-20 cursor-pointer'>
-                <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 12.5H6v-1h5.5V6h1v5.5H18v1h-5.5V18h-1z"/></svg>
-            </div></Link>
-            </div> */}
-            
+            <AddStudent></AddStudent>            
             <SearchBar placeholder='Search'></SearchBar>
 
 
@@ -33,18 +23,35 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
                 <table className='w-full'>
                     <tbody className='flex flex-col w-full gap-3'>
                         {students?.map((student)=>(
-                            <Link href={
-                                `/NewAdmin/Student/${student.id}`
-                                } key={student.id}>
 
                 <tr className='bg-gray-100 bg-opacity-65' >
                              <td className='w-1/4 pl-5 pr-32'>{student.firstName}</td>
                              <td className='w-1/4 px-32'>{student.registrationNumber}</td>
                              <td className='w-1/4 px-32'>{student.email} </td>
                              
-                         </tr>
+                             <div className='flex flex-row w-full  justify-between my-2'>
+                                <Link href={`/NewAdmin/Student/${student.id}`} key={student.id}>
+                                    <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[8vw] mx-3'>
+                                    <div>
+                                        <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
+                                        <p className='hidden lg:block text-xs'>
+                                        View
+
+                                        </p>
+                                    </div>
+                                    </button>
                                 </Link>
-                            
+
+                                <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[8vw] flex items-center justify-center rounded-full mx-3'>
+                                    <div>
+                                    <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
+                                    <p className='hidden lg:block text-xs'>
+                                    Delete
+                                    </p>
+                                    </div>
+                                </button>
+                            </div>
+                         </tr>                            
                         ))}
                                          
                     </tbody>
