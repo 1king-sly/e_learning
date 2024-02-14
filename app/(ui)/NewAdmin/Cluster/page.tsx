@@ -21,7 +21,7 @@ export default async function page({searchParams}:{searchParams:string}) {
 
         <div className='grid grid-cols-3 gap-3 mx-20'>
           {clusters?.map((cluster)=>(
-                <div className='my-10 shadow-lg bg-gray-100 w-full h-[25vh] rounded-xl text-center text-lg'>
+                <div className='my-10 shadow-lg bg-gray-100 w-full h-[25vh] rounded-xl text-center text-lg' key={cluster.id}>
                <h1 className='py-5 px-2'>
                 {cluster.title}
                </h1>
@@ -29,9 +29,9 @@ export default async function page({searchParams}:{searchParams:string}) {
                 {cluster.author?.firstName + " "+ cluster.author?.secondName}
                </h1>
 
-               <div className='flex flex-row w-full gap-3'>
-               <Link href={`/NewAdmin/Cluster/${cluster.id}`}  key={cluster.id}>
-                <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[15vw] mx-3'>
+               <div className='flex flex-row w-full justify-evenly'>
+               <Link href={`/NewAdmin/Cluster/${cluster.id}`} >
+                <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[11vw] '>
                   <div>
                     <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
                     <p className='hidden lg:block text-xs'>
@@ -42,7 +42,7 @@ export default async function page({searchParams}:{searchParams:string}) {
                 </button>
               </Link>
 
-              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[15vw] flex items-center justify-center rounded-full mx-3'>
+              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[11vw] flex items-center justify-center rounded-full '>
                 <div>
                   <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
                   <p className='hidden lg:block text-xs'>

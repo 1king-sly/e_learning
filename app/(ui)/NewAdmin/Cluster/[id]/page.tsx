@@ -21,13 +21,12 @@ export default async function Page({ params,searchParams }: { params: { id: stri
           <table className='w-full'>
             <tbody className='flex-col mt-4 gap-3 flex'>
               {datas.exams.map((exam) => (
-                <Link href={`/NewAdmin/Exams/${exam.id}`} key={exam.id}>
                   <tr className='min-[426px]:justify-around  flex bg-gray-100 py-2 w-full pr-2 items-center max-[425px]:gap-6' key={exam.id}>
                     <td className='w-1/3 truncate'>{exam.title}</td>
                     <td className='w-1/3 max-[425px]:hidden'>{new Date(exam.createdAt).toLocaleDateString()}</td>
-                    <Link href='#'>
+                    <Link href={`/NewAdmin/Exams/${exam.id}`} key={exam.id}>
                       <td className='w-1/12 mx-4' >
-                      <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full '>
+                      <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full w-[6vw]'>
                         <div>
                           <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
                           <p className='hidden lg:block text-xs'>
@@ -52,7 +51,6 @@ export default async function Page({ params,searchParams }: { params: { id: stri
                         </button>
                       </form></td>
                   </tr>
-                </Link>
               ))}
             </tbody>
           </table> 
