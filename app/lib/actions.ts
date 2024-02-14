@@ -448,7 +448,6 @@ export const fetchUser = async (id:string) => {
       },
     });
 
-    console.log(user)
     return user;
 
   }catch(error){
