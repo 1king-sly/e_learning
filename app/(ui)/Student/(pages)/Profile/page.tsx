@@ -2,7 +2,7 @@
 import React from 'react'
 import { authOptions } from '@/utils/authUptions'
 import { getServerSession } from 'next-auth'
-import ProfileForm from '@/app/(ui)/NewAdmin/Components/ProfileForm'
+import ProfileForm from '@/app/(ui)/NewAdmin/Components/Profile'
 
 export default async function ProfilePage() {
     const user = await getServerSession(authOptions)

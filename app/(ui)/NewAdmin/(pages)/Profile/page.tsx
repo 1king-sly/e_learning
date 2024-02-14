@@ -1,6 +1,6 @@
 'use server'
 import React from 'react'
-import ProfileForm from '../../Components/ProfileForm'
+import ProfileForm from '../../Components/Profile'
 import ProfileIcon from '../../Components/ProfileIcon'
 import { authOptions } from '@/utils/authUptions'
 import { getServerSession } from 'next-auth'
