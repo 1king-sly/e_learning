@@ -336,11 +336,7 @@ export const updateCluster = async (formData: FormData) => {
 
   }catch(error){
     console.error("Error Updating Project",error)
-  }
-  finally {
-    
-  }
-  
+  }  
 };
 
 export const updateUser = async (formData: FormData) => {
@@ -477,10 +473,13 @@ export const countTeachers = async () => {
 
 
 
-export const fetchStudents = async (query: string) => {
+export const fetchStudents = async (query: any) => {
+
   'use server'
+
+  const search = query as unknown as string
   try {
-    if (typeof query === 'string' && query.trim()) {
+    if (search && search.trim()) {
 
       const users = await prisma.user.findMany({
         where: {
@@ -490,12 +489,12 @@ export const fetchStudents = async (query: string) => {
           OR: [
             {
               registrationNumber: {
-                contains: query.trim(),
+                contains: search.trim(),
               },
             },
             {
               firstName: {
-                contains: query.trim(),
+                contains: search.trim(),
               },
             },
           ],
@@ -526,10 +525,11 @@ export const fetchStudents = async (query: string) => {
     await prisma.$disconnect();
   }
 };
-export const fetchTeachers = async (query: string) => {
+export const fetchTeachers = async (query: any) => {
   'use server'
+  const search = query as unknown as string
   try {
-    if (typeof query === 'string' && query.trim()) {
+    if (search && search.trim()) {
       const users = await prisma.user.findMany({
         where: {
           userType: {
@@ -538,12 +538,17 @@ export const fetchTeachers = async (query: string) => {
           OR: [
             {
               registrationNumber: {
-                contains: query.trim(),
+                contains: search.trim(),
               },
             },
             {
               firstName: {
-                contains: query.trim(),
+                contains: search.trim(),
+              },
+            },
+            {
+              email: {
+                contains: search.trim(),
               },
             },
           ],

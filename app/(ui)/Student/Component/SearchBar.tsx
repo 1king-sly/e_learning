@@ -25,8 +25,8 @@ export default function SearchBar({placeholder}:{placeholder:string}) {
   
       },200)
   return (
-    <div className='relative mx-20 my-5'>
-<input type="text"  name='searchBox'  placeholder={placeholder} className='w-full p-2 border-2 rounded-lg pr-10'   onChange={(e)=>{
+    <div className='relative mx-20 my-5 '>
+<input type="text"  name='searchBox'  placeholder={placeholder} className='w-full p-2 border-2 rounded-lg pr-10 outline-sky-300'   onChange={(e)=>{
         handleSearch(e.target.value)
       }}/>
     <MagnifyingGlassIcon className='h-5 w-5 md:h-6 md:w-6 lg:w-7 lg:h-7 absolute top-2 right-2 cursor-pointer'></MagnifyingGlassIcon>
