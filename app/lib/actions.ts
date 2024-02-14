@@ -253,6 +253,7 @@ export const fetchSingleCluster = async (clusterId: string,query:string) => {
     console.error('Error fetching Single Cluster Exams', error);
   }
 };
+
 export const fetchSingleExam = async (examId:string) => {
   'use server';
     const user = await getServerSession(authOptions)

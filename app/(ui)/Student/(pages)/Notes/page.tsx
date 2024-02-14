@@ -3,6 +3,8 @@ import React from 'react'
 import SearchBar from '../../Component/SearchBar'
 import { FolderIcon } from '@heroicons/react/24/outline'
 import { fetchStudentBookClusters } from '@/app/lib/actions'
+import Link from 'next/link'
+
 
 export default async function NotesPage({searchParams}:{searchParams:string}) {
 
@@ -20,10 +22,12 @@ export default async function NotesPage({searchParams}:{searchParams:string}) {
          <div>
         <div className='pl-20 grid grid-cols-4 gap-4 p-5'>
          { exams?.map((exam)=>(
-            <div className='' key={exam.id}>
+             <Link href={`/Student/Notes/${exam.id}` } key={exam.id}>
+             <div className='' key={exam.id}>
             <FolderIcon className='h-5 w-5 md:h-6 md:w-6 lg:w-40 lg:h-40'></FolderIcon>
             <h1 className='ml-8 text-lg '>{exam.title} </h1>
             </div>
+          </Link>
          ))}   
         </div>
     </div>
