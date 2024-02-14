@@ -2,7 +2,7 @@
 import React from 'react'
 import Link from 'next/link'
 import SearchBar from '@/app/(ui)/Student/Component/SearchBar';
-import { fetchAllClusters } from '@/app/lib/actions'
+import { fetchAllClusters ,deleteSingleCluster} from '@/app/lib/actions'
 import CreateCluster from '../Components/CreateCluster';
 import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
 
@@ -29,7 +29,7 @@ export default async function page({searchParams}:{searchParams:string}) {
                 {cluster.author?.firstName + " "+ cluster.author?.secondName}
                </h1>
 
-               <div className='flex flex-row w-full gap-3'>
+               <div className='flex flex-row w-full justify-between px-3'>
                <Link href={`/NewAdmin/Cluster/${cluster.id}`} >
                 <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[15vw] mx-3'>
                   <div>
@@ -42,7 +42,10 @@ export default async function page({searchParams}:{searchParams:string}) {
                 </button>
               </Link>
 
-              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[15vw] flex items-center justify-center rounded-full mx-3'>
+              
+              <form action={deleteSingleCluster} className='w-[15vw]'>
+              <input type="text" title='clusterId' name='clusterId' className='hidden ' value={cluster.id}/>
+              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-full flex items-center justify-center rounded-full mx-3' type='submit'>
                 <div>
                   <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
                   <p className='hidden lg:block text-xs'>
@@ -50,6 +53,10 @@ export default async function page({searchParams}:{searchParams:string}) {
                   </p>
                 </div>
             </button>
+
+              </form>
+
+             
             </div>
             
            </div>

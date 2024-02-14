@@ -680,23 +680,51 @@ export const deleteSingleExam = async (formData: FormData) => {
 export const deleteSingleCluster = async (formData: FormData) => {
   'use server';
 
-
   const clusterId = formData.get('clusterId') as string;
 
-  try{
+  try {
+    const cluster = await prisma.cluster.findUnique({
+      where: {
+        id: parseInt(clusterId),
+      },
+      include: {
+        exams: true,
+      },
+    });
 
-      const deletedCluster=await prisma.cluster.delete({
-        where:{
-          id:parseInt(clusterId),
-        }
-      })
+    if (!cluster) {
+      throw new Error('Cluster not found');
+    }
 
-  }catch(error){
-    console.error("Error Deleting Cluster",error)
+    await Promise.all(cluster.exams.map(async (exam) => {
+      await prisma.examOpening.deleteMany({
+        where: {
+          examId: exam.id,
+        },
+      });
+    }));
+
+    await Promise.all(cluster.exams.map(async (exam) => {
+      await prisma.exam.delete({
+        where: {
+          id: exam.id,
+        },
+      });
+    }));
+
+    const deletedCluster = await prisma.cluster.delete({
+      where: {
+        id: parseInt(clusterId),
+      },
+    });
+
+    revalidatePath(`/NewAdmin/Cluster`)
+    return deletedCluster;
+  } catch (error) {
+    console.error('Error deleting cluster and associated exams:', error);
   }
-
-  
 };
+
 
 
 export const createExam = async (formData:any) => {
