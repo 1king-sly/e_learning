@@ -23,9 +23,7 @@ export default async function Stats() {
                 </div>
               </div>
               <p className="mb-2 font-bold md:text-lg">Total Users</p>
-              <p className="text-gray-700">
-                This is a total of all the users currently using the website
-              </p>
+              
             </div>
             <div>
               <div className="flex">
@@ -39,9 +37,7 @@ export default async function Stats() {
                 </div>
               </div>
               <p className="mb-2 font-bold md:text-lg">Teachers</p>
-              <p className="text-gray-700">
-              This is a total of all the Teachers currently using the system
-              </p>
+              
             </div>
             <div>
               <div className="flex">
@@ -55,9 +51,7 @@ export default async function Stats() {
                 </div>
               </div>
               <p className="mb-2 font-bold md:text-lg">Students</p>
-              <p className="text-gray-700">
-                This is a total of all the Students currently using the system
-              </p>
+              
             </div>
           </div>
         </div>

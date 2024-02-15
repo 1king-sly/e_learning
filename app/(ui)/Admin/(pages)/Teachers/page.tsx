@@ -32,7 +32,7 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
              <h1 className='p-2 text-sm'>{teacher?.registrationNumber} </h1>
 
              <div className='flex flex-row w-full  justify-between'>
-              <Link href={`/NewAdmin/Teachers/${teacher.id}`}  key={teacher.id}>
+              <Link href={`/Admin/Teachers/${teacher.id}`}  key={teacher.id}>
                 <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[8vw] mx-3'>
                   <div>
                     <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>

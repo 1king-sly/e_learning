@@ -3,8 +3,8 @@ import SearchBar from '@/app/(ui)/Student/Component/SearchBar';
 
 import { fetchSingleCluster,deleteSingleExam } from '@/app/lib/actions';
 import Link from 'next/link';
-import CreateExam from '../../Components/CreateExam';
 import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
+import CreateExam from '../../../Component/CreateExam';
 
 export default async function Page({ params,searchParams }: { params: { id: string },searchParams:string }) {
     const search = new URLSearchParams(searchParams);
@@ -25,7 +25,7 @@ export default async function Page({ params,searchParams }: { params: { id: stri
                   <tr className='min-[426px]:justify-around  flex bg-gray-100 py-2 w-full pr-2 items-center max-[425px]:gap-6' key={exam.id}>
                     <td className='w-1/3 truncate'>{exam.title}</td>
                     <td className='w-1/3 max-[425px]:hidden'>{new Date(exam.createdAt).toLocaleDateString()}</td>
-                    <Link href={`/NewAdmin/Exams/${exam.id}`} key={exam.id}>
+                    <Link href={`/Admin/Exams/${exam.id}`} key={exam.id}>
                       <td className='w-1/12 mx-4' >
                       <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full w-[6vw]'>
                         <div>

@@ -17,7 +17,7 @@ export default async function Tables() {
           <table className='w-full'>
             <tbody className='flex-col mt-4 gap-3 flex'>
               {datas.map((data) => (
-                <Link href={`/NewAdmin/Exams/${data.id}`} key={data.id}>
+                <Link href={`/Teacher/View/${data.id}`} key={data.id}>
                   <tr className='min-[426px]:justify-around  flex bg-gray-100 py-2 w-full pr-2 items-center max-[425px]:gap-6'>
                     <td className='w-1/3 truncate'>{data.title}</td>
                     <td className='w-1/3 max-[425px]:hidden'>{data.createdAt.toLocaleDateString()}</td>

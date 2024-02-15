@@ -30,7 +30,7 @@ export default async function page({searchParams}:{searchParams:string}) {
                </h1>
 
                <div className='flex flex-row w-full justify-evenly'>
-               <Link href={`/NewAdmin/Cluster/${cluster.id}`} >
+               <Link href={`/Admin/Cluster/${cluster.id}`} >
                 <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[11vw] '>
                   <div>
                     <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
