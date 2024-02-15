@@ -1,8 +1,11 @@
 import SideNav from './Component/SideNav'
+import Header from './Component/Header'
+import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import NavBar from './Component/NavBar'
-import {authOptions} from '@/utils/authUptions'
-import { getServerSession } from 'next-auth'
+import { authOptions } from '@/utils/authUptions'
+// import { fetchUser } from '@/app/lib/actions'
+
 export default async function RootLayout({
   children,
 }: {
@@ -19,9 +22,9 @@ export default async function RootLayout({
     
   //   redirect('/Student/Dashboard')
   // }
-  // if(userType === 'TEACHER'){
+  // if(userType === 'ADMIN'){
     
-  //   redirect('/Teacher/Dashboard')
+  //   redirect('/Admin/Dashboard')
   // }
   return (
     <>

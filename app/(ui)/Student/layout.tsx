@@ -1,12 +1,29 @@
 import React from 'react'
 import SideNav from './Component/SideNav'
 import NavBar from './Component/NavBar'
+import {authOptions} from '@/utils/authUptions'
+import { getServerSession } from 'next-auth'
 
 export default async function StudentLayout({
     children,
 }:{
     children: React.ReactNode
 }) {
+
+    // const session = await getServerSession(authOptions)
+    // if(!session){
+    //   redirect('/')
+    // }
+    // const userType = session?.userType
+  
+    // if(userType === 'ADMIN'){
+      
+    //   redirect('/Admin/Dashboard')
+    // }
+    // if(userType === 'TEACHER'){
+      
+    //   redirect('/Teacher/Dashboard')
+    // }
   return (
         <>
         <div className='w-screen h-screen flex flex-col overflow-hidden gap-1 mb-0'>
