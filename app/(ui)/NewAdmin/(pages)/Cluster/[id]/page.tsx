@@ -3,8 +3,8 @@ import SearchBar from '@/app/(ui)/Student/Component/SearchBar';
 
 import { fetchSingleCluster,deleteSingleExam } from '@/app/lib/actions';
 import Link from 'next/link';
-import CreateExam from '../../Components/CreateExam';
 import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
+import CreateExam from '../../../Components/CreateExam';
 
 export default async function Page({ params,searchParams }: { params: { id: string },searchParams:string }) {
     const search = new URLSearchParams(searchParams);
