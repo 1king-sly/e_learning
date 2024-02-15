@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from 'react'
 import SearchBar from '@/app/(ui)/Student/Component/SearchBar'
+import ExamCard from '../../Components/ExamCard'
 import Link from 'next/link'
-import ExamCard from '../../Component/ExamCard';
 
 export default function ExamsPage() {
     const [visible, setVisible] = useState(false);

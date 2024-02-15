@@ -1,8 +1,9 @@
 'use server'
 import React from 'react'
+import ProfileForm from '../../Components/Profile'
+import ProfileIcon from '../../Components/ProfileIcon'
 import { authOptions } from '@/utils/authUptions'
 import { getServerSession } from 'next-auth'
-import ProfileForm from '../../Component/Profile'
 
 export default async function ProfilePage() {
     const user = await getServerSession(authOptions)

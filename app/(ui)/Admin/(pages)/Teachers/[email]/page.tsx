@@ -7,7 +7,7 @@ import { fetchUser, updateUser,fetchUserCreatedExams } from '@/app/lib/actions';
 
 import Link from 'next/link';
 import NotFound from './not-found';
-import ProfileForm from '../../../Component/ProfileForm';
+import ProfileForm from '../../../Components/ProfileForm';
 
 export default async function Page({ params }: { params: { email: string } }) {  
     const userEmail = params.email

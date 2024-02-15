@@ -1,10 +1,10 @@
 'use server'
 import React from 'react'
 import SearchBar from '@/app/(ui)/Student/Component/SearchBar'
+import AddStudent from '../../Components/AddStudent'
 import Link from 'next/link'
 import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline'
 import { fetchStudents,deleteSingleUser } from '@/app/lib/actions'
-import AddStudent from '../../Component/AddStudent'
 
 export default async function StudentPage({searchParams}:{searchParams:string}) {
     const params = new URLSearchParams(searchParams);

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import SearchBar from '@/app/(ui)/Student/Component/SearchBar';
 import { fetchAllClusters ,deleteSingleCluster} from '@/app/lib/actions'
 import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
-import CreateCluster from '../../Component/CreateCluster';
+import CreateCluster from '../../Components/CreateCluster';
 
 export default async function page({searchParams}:{searchParams:string}) {
 

@@ -5,8 +5,8 @@ import { fetchTeachers,deleteSingleUser } from '@/app/lib/actions';
 import ProfilePic from '@/public/images/ProfilePic.jpeg'
 import Image from 'next/image'
 import Link from 'next/link';
+import AddTeacher from '../../Components/AddTeacher';
 import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
-import AddTeacher from '../../Component/AddTeacher';
 
 export default async function TeacherPage({searchParams}:{searchParams:string}) {
 

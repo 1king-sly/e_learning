@@ -5,8 +5,8 @@ import Image from 'next/image'
 import profile from '@/public/images/ProfilePic.jpeg'
 import { fetchUser, updateUser } from '@/app/lib/actions';
 import {  redirect } from 'next/navigation';
+import ProfileForm from '../../../Components/ProfileForm';
 import NotFound from './not-found';
-import ProfileForm from '../../../Component/ProfileForm';
 
 export default async function Page({ params }: { params: { id: string } }) {  
     const userId = params.id
