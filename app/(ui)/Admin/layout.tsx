@@ -2,6 +2,7 @@ import SideNav from './Component/SideNav'
 import Header from './Component/Header'
 // import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
+import NavBar from './Component/NavBar'
 // import { fetchUser } from '@/app/lib/actions'
 
 export default async function RootLayout({
@@ -33,7 +34,7 @@ export default async function RootLayout({
     <>
     <div className='w-screen h-screen flex flex-col overflow-hidden gap-1'>
       <div className='w-full bg-gray-200 shadow-md h-[10vh]'>
-        <Header></Header>
+      <NavBar></NavBar>
       </div>
       <div className='w-full  max-h-full h-full flex flex-row'>
         <div className='h-full overflow-hidden w-[15vw]   bg-sky-500  flex justify-center' >
