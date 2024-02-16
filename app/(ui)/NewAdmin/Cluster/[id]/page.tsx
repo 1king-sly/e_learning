@@ -27,7 +27,7 @@ export default async function Page({ params,searchParams }: { params: { id: stri
                     <td className='w-1/3 max-[425px]:hidden'>{new Date(exam.createdAt).toLocaleDateString()}</td>
                     <Link href={`/NewAdmin/Exams/${exam.id}`} key={exam.id}>
                       <td className='w-1/12 mx-4' >
-                      <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full w-[6vw]'>
+                      <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full w-[6vw] flex items-center justify-center mx-3'>
                         <div>
                           <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
                           <p className='hidden lg:block text-xs'>
@@ -42,7 +42,7 @@ export default async function Page({ params,searchParams }: { params: { id: stri
 
                       <form action={deleteSingleExam} className=''>
               <input type="text" title='examId' name='examId' className='hidden ' value={exam.id}/>
-              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-full flex items-center justify-center rounded-full mx-3' type='submit'>
+              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[6vw] flex items-center justify-center rounded-full mx-3' type='submit'>
                 <div>
                   <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
                   <p className='hidden lg:block text-xs'>
@@ -62,6 +62,46 @@ export default async function Page({ params,searchParams }: { params: { id: stri
           </div>
         )}</div>
       </div>
+
+      {/* <div className='p-10 pb-40 max-[425px]:p-1'>
+
+      <div className='mx-20'>
+          <table className='w-full'>
+            <tbody className='flex-col mt-4 gap-3 flex'>
+                  <tr className='min-[426px]:justify-around  flex bg-gray-100 py-2 w-full pr-2 items-center max-[425px]:gap-6' key={'exam.id'}>
+                    <td className='w-1/3 truncate'>Title</td>
+                    <td className='w-1/3 max-[425px]:hidden'>01/02/2024</td>
+                    <Link href='{`/NewAdmin/Exams/${exam.id}`}'key={'exam.id'}>
+                      <td className='w-1/12 mx-4' >
+                      <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full w-[6vw] flex items-center justify-center mx-3'>
+                        <div>
+                          <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
+                          <p className='hidden lg:block text-xs'>
+                            View
+
+                          </p>
+                        </div>
+                        </button>
+                      </td>
+                      </Link>
+                      <td className='w-1/12 mx-4' >
+
+                      <form action={deleteSingleExam} className=''>
+              <input type="text" title='examId' name='examId' className='hidden ' value={'exam.id'}/>
+              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[6vw] flex items-center justify-center rounded-full mx-3' type='submit'>
+                <div>
+                  <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
+                  <p className='hidden lg:block text-xs'>
+                  Delete
+                  </p>
+                </div>
+            </button>
+
+              </form></td>
+                  </tr>
+            </tbody>
+          </table> 
+          </div></div> */}
     </>
   );
 }

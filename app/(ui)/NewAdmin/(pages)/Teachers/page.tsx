@@ -20,7 +20,7 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
         
         <SearchBar placeholder='search'></SearchBar>
         
-        <div className='grid grid-cols-4 gap-3 mx-20'>
+        <div className='grid lg:grid-cols-4 gap-3 mx-20 md:grid-cols-2 sm:grid-cols-1'>
           
           {teachers?.map((teacher)=>(
       <div className='my-10 shadow-lg bg-gray-100 w-full h-[35vh] rounded-xl text-center text-lg' key={teacher.id}>
@@ -31,9 +31,9 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
              </h1>
              <h1 className='p-2 text-sm'>{teacher?.registrationNumber} </h1>
 
-             <div className='flex flex-row w-full  justify-between'>
+             <div className='flex flex-row w-full  justify-evenly'>
               <Link href={`/NewAdmin/Teachers/${teacher.id}`}  key={teacher.id}>
-                <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[8vw] mx-3'>
+                <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[6vw] flex mx-3 items-center justify-center'>
                   <div>
                     <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
                     <p className='hidden lg:block text-xs'>
@@ -43,10 +43,10 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
                   </div>
                 </button>
               </Link>
-
-              <form action={deleteSingleUser} className='w-[8vw]'>
+              <div>
+              <form action={deleteSingleUser} className=''>
               <input type="text" title='userId' name='userId' className='hidden ' value={teacher.id}/>
-              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-full flex items-center justify-center rounded-full mx-3' type='submit'>
+              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[6vw] flex items-center justify-center rounded-full mx-3' type='submit'>
                 <div>
                   <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
                   <p className='hidden lg:block text-xs'>
@@ -56,6 +56,7 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
             </button>
 
               </form>
+              </div>
           </div>
          </div>
             
@@ -65,6 +66,46 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
           ))}
        
         </div>
+        {/* <div className='grid lg:grid-cols-4 gap-3 mx-20 md:grid-cols-2 sm:grid-cols-1'>
+          
+      <div className='my-10 shadow-lg bg-gray-100 w-full h-[35vh] rounded-xl text-center text-lg' key={'teacher.id'}>
+             <Image src={ProfilePic} alt={'Profile Pic'} className='rounded-full h-20 w-20 mx-auto p-2' width={100}   height={100}></Image>
+             <h1 className='p-2 text-sm'>Teachers Name</h1>
+             <h1 className='p-2 text-sm'>
+              email.com
+             </h1>
+             <h1 className='p-2 text-sm'>44334 </h1>
+
+             <div className='flex flex-row w-full  justify-evenly'>
+              <Link href='{`/NewAdmin/Teachers/${teacher.id}`}  key={teacher.id}'>
+                <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[6vw] flex mx-3 items-center justify-center '>
+                  <div>
+                    <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
+                    <p className='hidden lg:block text-xs'>
+                      View
+
+                    </p>
+                  </div>
+                </button>
+              </Link>
+              <div>
+              <form action={deleteSingleUser} className=''>
+              <input type="text" title='userId' name='userId' className='hidden ' value={'teacher.id'}/>
+              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[6vw] flex items-center justify-center rounded-full mx-3' type='submit'>
+                <div>
+                  <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
+                  <p className='hidden lg:block text-xs'>
+                  Delete
+                  </p>
+                </div>
+            </button>
+
+              </form>
+              </div>
+          </div>
+         </div>
+         </div> */}
+          
     </>
   )
 }
