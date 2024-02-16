@@ -1,6 +1,6 @@
 import React from 'react'
-import Stats from '../../Components/Stats'
-import Tables from '../../Components/Tables'
+import Stats from '../../Component/Stats'
+import Tables from '../../Component/Tables'
 
 export default function page() {
   return (

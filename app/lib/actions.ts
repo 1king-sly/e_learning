@@ -838,7 +838,8 @@ export const createExam = async (formData:any) => {
         },
       },
     });
-    revalidatePath(`/NewAdmin/Cluster/${category}`);
+    revalidatePath(`/Admin/Cluster/${category}`);
+    revalidatePath(`/Teacher/Cluster/${category}`);
     return newExam;
   } catch (error) {
     console.error(error, 'CREATING EXAM');
@@ -1035,7 +1036,7 @@ export const createCluster = async (formData: FormData) => {
           visibility:ClusterVisibility[Visibility as keyof typeof ClusterVisibility ]
         },
       });
-      revalidatePath('/NewAdmin/Cluster')
+      revalidatePath('/Admin/Cluster')
       return newCluster;
      
   } catch (error) {
@@ -1070,8 +1071,8 @@ export const createUser = async (formData: any) => {
         hashedPassword:hashedPassword,
     },
     });
-      revalidatePath('/NewAdmin/Students')
-      revalidatePath('/NewAdmin/Teachers')
+      revalidatePath('/Admin/Students')
+      revalidatePath('/Admin/Teachers')
       return newUser;
      
   } catch (error) {

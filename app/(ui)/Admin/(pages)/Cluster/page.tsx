@@ -1,136 +1,70 @@
-'use client'
-import React, { useEffect, useState } from 'react';
-import Button from '@/app/(ui)/Button';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+'use server'
+import React from 'react'
+import Link from 'next/link'
+import SearchBar from '@/app/(ui)/Student/Component/SearchBar';
+import { fetchAllClusters ,deleteSingleCluster} from '@/app/lib/actions'
+import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
+import CreateCluster from '../../Components/CreateCluster';
 
+export default async function page({searchParams}:{searchParams:string}) {
 
-export default  function Page() {
-  const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const [formData, setFormData] = useState({
-    title: '',
-    Visibility: '',
-  });
-
-  const router = useRouter();
-
-  const toggleLoading = () => {
-    setLoading((prevLoading) => !prevLoading);
-  };
-
-  const handleChange = (event: React.ChangeEvent< HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-   {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
-  };
-
-  const handleSubmit = async () => {
-    const event = window.event;
-    if (!event) {
-      return;
-    }
-    event.preventDefault();
-
-    console.log(formData)
-
-    toast.loading('Creating Cluster .....')
-
-    toggleLoading();
-    try {
-      const create = await fetch('/api/createCluster', {
-        method: 'POST',
-        body:JSON.stringify(formData)
-        });
-
-      if (create?.ok && create?.status === 200) {
-        toast.dismiss()
-        toast.success('Cluster Created Successfully')
-      } else if (create?.status !== 200) {
-        toast.dismiss()
-        toast.error('Something Went wrong')
-      }
-
-    } catch (error) {
-      toast.dismiss()
-
-      toast.error('Server Side error')
-    } finally {
-      toggleLoading();
-    }
-  };
-
-  useEffect(() => {
-    setDisabled(loading);
-  }, [loading]);
+  const params = new URLSearchParams(searchParams);
+  const q = params.get('query') || '';
+  const clusters = await fetchAllClusters(q)
   
-
   return (
     <>
-      <div className='w-full min-h-screen flex flex-col items-center justify-center pb-40'>
-        <div className='flex flex-col  items-center'>
-          {/* <Image src={logo} alt='logo' className='lg:h-24 lg:w-24 object-cover h-16 w-16'></Image> */}
-          <h3 className='text-sky-300 max-[425px]:text-xs'>CREATE A CLUSTER</h3>
-        </div>
+    <div className='p-10 pb-40 max-[425px]:p-1'>
+      <CreateCluster></CreateCluster>
 
-        <div>
-          <form  className='w-[80vw] flex flex-col gap-2' >
-            <div className='w-full flex justify-center items-center flex-col gap-2'>
-              <textarea
-                name="title"
-                id="title"
-                title='title'
-                placeholder='Cluster Title'
-                className='resize-none p-2 h-10 w-80 flex items-center rounded-md outline-sky-200 overflow-hidden'
-                maxLength={50}
-                value={formData.title}
-                onChange={handleChange}
+        <SearchBar placeholder='Search'/>
 
-                
-                
-              ></textarea>
-             
-             <label>
-                
-                <select
-                  name='Visibility'
-                  className='bg-white outline-sky-400 px-2 py-1 rounded-md w-80 text-gray-800 text-sm  '
-                  required
-                  title='school'
-                  value={formData.Visibility}
-                  onChange={handleChange}
+        <div className='grid grid-cols-3 gap-3 mx-20'>
+          {clusters?.map((cluster)=>(
+                <div className='my-10 shadow-lg bg-gray-100 w-full h-[25vh] rounded-xl text-center text-lg' key={cluster.id}>
+               <h1 className='py-5 px-2'>
+                {cluster.title}
+               </h1>
+               <h1 className='py-5 px-2'>
+                {cluster.author?.firstName + " "+ cluster.author?.secondName}
+               </h1>
 
-                >
-                   <option disabled value=''>
-                   Choose Visibility
-                  </option> 
-                  <option value='Hidden'>Hidden</option>
-                  <option value='Visible'>Visible</option>
-                </select>
-              </label>     
-            
+               <div className='flex flex-row w-full justify-evenly'>
+               <Link href={`/Admin/Cluster/${cluster.id}`} >
+                <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[11vw] '>
+                  <div>
+                    <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
+                    <p className='hidden lg:block text-xs'>
+                      View
+
+                    </p>
+                  </div>
+                </button>
+              </Link>
+
+              
+              <form action={deleteSingleCluster} className='w-[15vw]'>
+              <input type="text" title='clusterId' name='clusterId' className='hidden ' value={cluster.id}/>
+              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[11vw] flex items-center justify-center rounded-full' type='submit'>
+                <div>
+                  <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
+                  <p className='hidden lg:block text-xs'>
+                  Delete
+                  </p>
+                </div>
+            </button>
+
+              </form>
+
              
             </div>
-
             
-
-           
-
-            <div className='w-full md:w-2/5 flex justify-end'>
-              <Button type='submit'              onClick={handleSubmit}
-              disabled={disabled}
-
-               >Submit</Button>
-            </div>
-          </form>
-        </div>
-      </div>
+           </div>
+             
+          ))}
+       
+        </div></div>
     </>
-  );
+  )
 }
-
-
+  
