@@ -31,7 +31,7 @@ export default async function page({searchParams}:{searchParams:string}) {
 
                <div className='flex flex-row w-full justify-evenly'>
                <Link href={`/Admin/Cluster/${cluster.id}`} >
-                <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[11vw] '>
+                <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full  w-[8vw] flex items-center justify-center'>
                   <div>
                     <EyeIcon className=' h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
                     <p className='hidden lg:block text-xs'>
@@ -43,9 +43,9 @@ export default async function page({searchParams}:{searchParams:string}) {
               </Link>
 
               
-              <form action={deleteSingleCluster} className='w-[15vw]'>
+              <form action={deleteSingleCluster} className=''>
               <input type="text" title='clusterId' name='clusterId' className='hidden ' value={cluster.id}/>
-              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[11vw] flex items-center justify-center rounded-full' type='submit'>
+              <button className='bg-rose-500 p-2 text-white text-sm lg:rounded-md w-[8vw] flex items-center justify-center rounded-full' type='submit'>
                 <div>
                   <TrashIcon className='h-3 w-3 md:w-4 md:h-4 lg:hidden'/>
                   <p className='hidden lg:block text-xs'>

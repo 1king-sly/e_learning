@@ -26,7 +26,7 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
                     <tbody className='flex flex-col w-full gap-3'>
                         {students?.map((student)=>(
 
-                <tr className='bg-gray-100 bg-opacity-65 flex w-full justify-between px-4'  key={student.id} >
+                <       tr className='bg-gray-100 bg-opacity-65 flex w-full justify-between px-4'  key={student.id} >
                              <td className='w-1/4 pl-5 pr-32'>{student.firstName}</td>
                              <td className='w-1/4 px-32'>{student.registrationNumber}</td>
                              <td className='w-1/4 px-32'>{student.email} </td>

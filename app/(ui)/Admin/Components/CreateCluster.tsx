@@ -88,8 +88,8 @@ export default function CreateCluster() {
                     <h1 className='text-4xl font-serif font-bold'>Clusters</h1>
                 </div>
                 <div className='mt-10 mx-20 cursor-pointer' onClick={toggleVisible}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 12.5H6v-1h5.5V6h1v5.5H18v1h-5.5V18h-1z"/></svg>
-                </div>
+                    <button className='border lg:rounded-lg rounded-full border-black py-1 px-2 text-sm cursor-pointer hidden lg:block'>Add Teacher</button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 12.5H6v-1h5.5V6h1v5.5H18v1h-5.5V18h-1z" className=' lg:hidden '/></svg>                </div>
             </div>
         
             <div>
