@@ -43,8 +43,8 @@ export default function AuthForm() {
       } else if(session.data.userType === 'STUDENT') {
         router.push('/Student/Dashboard');
       }
-       else if(session.data.userType === 'TEACHER') {
-        router.push('/Admin/Dashboard');
+       else{
+        router.push('/Teacher/Dashboard');
       }
     }
   });
