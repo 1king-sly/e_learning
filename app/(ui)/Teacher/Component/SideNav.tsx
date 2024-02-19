@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import Link from 'next/link'
-import { ArrowRightEndOnRectangleIcon, CheckIcon } from '@heroicons/react/24/outline'
+import { ArrowRightEndOnRectangleIcon, CheckIcon, FolderIcon } from '@heroicons/react/24/outline'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 import { signOut } from 'next-auth/react'
@@ -15,7 +15,7 @@ export default function SideNav() {
        <div className='p-8 pl-10 h-screen w-4/5 hidden sm:block md:flex-none md:justify-center lg:justify-start md:p-2 md:px-3 gap-2 items-center'>
       <div className='md:text-sm'>
         <NavItem pathName={pathName} href="/Teacher/Dashboard" icon={<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 9V4H20v5zM4 12V4h6.5v8zm9.5 8v-8H20v8zM4 20v-5h6.5v5zm1-9h4.5V5H5zm9.5 8H19v-6h-4.5zm0-11H19V5h-4.5zM5 19h4.5v-3H5zm4.5-3"/></svg>} label="Dashboard" />
-        <NavItem pathName={pathName} href="/Teacher/Cluster" icon={<CheckIcon className='w-6 max-[425px]:w-4'/>} label="Clusters" />
+        <NavItem pathName={pathName} href="/Teacher/Cluster" icon={<FolderIcon className='w-6 max-[425px]:w-4'/>} label="Clusters" />
         <NavItem pathName={pathName} href="/Teacher/Exams" icon={ <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 48 48"><g fill="currentColor"><path d="M20 15a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1m1 3a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm-1 10a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1m1 3a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2z"/><path fill-rule="evenodd" d="M10 27a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zm2 1v3h3v-3z" clip-rule="evenodd"/><path d="M17.707 15.707a1 1 0 0 0-1.414-1.414L13 17.586l-1.293-1.293a1 1 0 0 0-1.414 1.414L13 20.414z"/><path fill-rule="evenodd" d="M10 6a4 4 0 0 0-4 4v28a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4V10a4 4 0 0 0-4-4zm-2 4a2 2 0 0 1 2-2h20a2 2 0 0 1 2 2v28a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2zm28 6a3 3 0 1 1 6 0v20.303l-3 4.5l-3-4.5zm3-1a1 1 0 0 0-1 1v2h2v-2a1 1 0 0 0-1-1m0 22.197l-1-1.5V20h2v15.697z" clip-rule="evenodd"/></g></svg>} label="Exams" />
         <NavItem pathName={pathName} href="/Teacher/Assignment" icon={ <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.75 1.75h10.5v12.5H2.75zm3 6h4.5m-4.5 3h2.5m-2.5-6h4.5"/></svg>} label="Assignments" />
         <NavItem pathName={pathName} href="/Teacher/Notes" icon={ <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="M7 0h16v20H5V0zm14 18V2H7v16zM9 4h10v2H9zm10 4H9v2h10zM9 12h7v2H9zm10 10H3V4H1v20h18z"/></svg>} label="Notes" />

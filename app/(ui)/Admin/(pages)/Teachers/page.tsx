@@ -20,7 +20,7 @@ export default async function TeacherPage({searchParams}:{searchParams:string}) 
         
         <SearchBar placeholder='search'></SearchBar>
         
-        <div className='grid lg:grid-cols-4 gap-3 mx-20 md:grid-cols-2 sm:grid-cols-1'>
+        <div className='grid lg:grid-cols-4 gap-3 mx-20 md:grid-cols-2 sm:grid-cols-1 pb-20'>
           
           {teachers?.map((teacher)=>(
       <div className='my-10 shadow-lg bg-gray-100 w-full h-[35vh] rounded-xl text-center text-lg' key={teacher.id}>

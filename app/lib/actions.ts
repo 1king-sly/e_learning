@@ -199,7 +199,7 @@ export const fetchSingleCluster = async (clusterId: string,query:string) => {
 
       const cluster = await prisma.cluster.findUnique({
         where: {
-          title: clusterId,
+          id: parseInt(clusterId),
         },
         include: {
           exams: {
@@ -229,7 +229,7 @@ export const fetchSingleCluster = async (clusterId: string,query:string) => {
     }
     const cluster = await prisma.cluster.findUnique({
       where: {
-        title: clusterId,
+        id: parseInt(clusterId),
       },
       include: {
         exams: {

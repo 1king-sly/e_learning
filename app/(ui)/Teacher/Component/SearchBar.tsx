@@ -1,3 +1,4 @@
+'use client'
 import React, { Suspense } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'

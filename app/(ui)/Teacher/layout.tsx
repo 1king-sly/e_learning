@@ -2,8 +2,8 @@ import SideNav from './Component/SideNav'
 import Header from './Component/Header'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import NavBar from './Component/NavBar'
 import { authOptions } from '@/utils/authUptions'
+import NavBar from './Component/NavBar'
 // import { fetchUser } from '@/app/lib/actions'
 
 export default async function RootLayout({
@@ -12,20 +12,20 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
 
-  // const session = await getServerSession(authOptions)
-  // if(!session){
-  //   redirect('/')
-  // }
-  // const userType = session?.userType
+  const session = await getServerSession(authOptions)
+  if(!session){
+    redirect('/')
+  }
+  const userType = session?.userType
 
-  // if(userType === 'STUDENT'){
+  if(userType === 'STUDENT'){
     
-  //   redirect('/Student/Dashboard')
-  // }
-  // if(userType === 'ADMIN'){
+    redirect('/Student/Dashboard')
+  }
+  if(userType === 'ADMIN'){
     
-  //   redirect('/Admin/Dashboard')
-  // }
+    redirect('/Admin/Dashboard')
+  }
   return (
     <>
     <div className='w-screen h-screen flex flex-col overflow-hidden gap-1'>
