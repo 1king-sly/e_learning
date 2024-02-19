@@ -43,7 +43,7 @@ export default function AddStudent() {
         event.preventDefault();
     
        
-        toast.loading('Creating User .....')
+        toast.loading('Creating Teacher .....')
     
         toggleLoading();
         try {
@@ -52,9 +52,16 @@ export default function AddStudent() {
           const create = await createUser(formData)
     
           if(create){
+            setFormData({
+              FName: '',
+              SName: '',
+              regNo: '',
+              userType: 'TEACHER',
+              email: '',
+            });
             toast.dismiss()
             toggleVisible()
-            toast.success('User Created Successfully')
+            toast.success('Teacher Created Successfully')
           }else{
             toast.dismiss()
             toast.error('Something went wrong')

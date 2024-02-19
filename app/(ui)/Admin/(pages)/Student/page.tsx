@@ -21,7 +21,7 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
 
 
             <div>
-            <div className='mx-20'>
+            <div className='mx-20 w-full flex justify-center'>
                 <table className='w-full'>
                     <tbody className='flex flex-col w-full gap-3'>
                         {students?.map((student)=>(
@@ -32,7 +32,7 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
                              <td className='w-1/4 px-32'>{student.email} </td>
                              
                             
-                                <Link href={`/Admin/Student/${student.id}`} key={student.id}>
+                                <Link href={`/Admin/Student/${student.registrationNumber}`} key={student.id}>
                                 <td className='w-1/12 mx-4' >
                                 <button className='bg-sky-300 p-2 text-white text-sm lg:rounded-md rounded-full w-[6vw]'>
                                     <div>

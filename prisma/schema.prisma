@@ -44,7 +44,7 @@ model Exam {
 
 model Cluster {
   id                  Int               @id @default(autoincrement())
-  title               String
+  title               String            @unique
   author              User              @relation("ClusterAuthor", fields: [authorId], references: [id])
   authorId            Int
   createdAt           DateTime          @default(now())
