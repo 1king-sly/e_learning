@@ -11,9 +11,11 @@ import { revalidatePath } from 'next/cache';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { title, file, level,category } = body;
+    const {  file } = body;
 
-    if (!title || !file || !level  ) {
+
+
+    if ( !file   ) {
       return new NextResponse('Missing info', { status: 400 });
     }
 
@@ -37,7 +39,6 @@ export async function POST(request: Request) {
             console.error(error);
             reject('Cloudinary upload error');
           } else {
-            console.log(result?.secure_url)
             resolve(result?.secure_url || '');
           }
         }
@@ -53,22 +54,12 @@ export async function POST(request: Request) {
     
     const cloudinaryFileUrl = await uploadPromise;
 
-    const user = await getServerSession(authOptions);
-    const newExam = await prisma.exam.create({
-      data: {
-        title,
-        authorId: parseInt(user.id),
-        createdById: parseInt(user.id),
-        file: cloudinaryFileUrl,
-        level: ExamLevel[level as keyof typeof ExamLevel],
-        clusters: {
-          connect: { id:parseInt(category)  }
-        },
-      },
-    });
 
-    revalidatePath(`/NewAdmin/Cluster/${category}`)
-    return new NextResponse(JSON.stringify(newExam), {
+
+    const user = await getServerSession(authOptions);
+    
+
+    return new NextResponse(JSON.stringify(cloudinaryFileUrl), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error: any) {

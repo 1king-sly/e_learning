@@ -21,7 +21,8 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
       level: '',
       file: null as { name: string, type: string, data: string } | null,
       imagePreview: null as string | null,
-    });
+      cloudinaryFileUrl: null as string | null,
+      });
   
     const toggleLoading = () => {
       setisLoading((prevLoading) => !prevLoading);
@@ -46,13 +47,37 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
       toggleLoading();
       try {
         toast.loading('Creating exam...');
-      
-        const create = await createExam(formData)
+        const response = await fetch('/api/create',{
+          method:'POST',
+          mode:'cors',
+          body:JSON.stringify(formData)
+
+        })
+
+        
     
-        if(create){
-          toast.dismiss()
-          toggleVisible()
-          toast.success('Exam created Successfully')
+        if(response.ok){
+          const data = await response.json();
+          
+          const cloudinaryFileUrl = data;
+
+          setFormData({
+            ...formData,
+            cloudinaryFileUrl: cloudinaryFileUrl,
+          });
+
+          const create = await createExam(formData)
+          if(create){
+            toast.dismiss()
+            toggleVisible()
+            toast.success('Exam created Successfully')
+          }
+          else{
+            toast.dismiss()
+            toast.error('Something went wrong')
+          }
+  
+          
         }
         else{
           toast.dismiss()
