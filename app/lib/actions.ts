@@ -783,12 +783,7 @@ export const createExam = async (formData:any) => {
     if(!title || !file || !category || !level ){
       throw new Error('Misssing Required Info')
     }
-   
-
-
-
-
-
+ 
     // const bufferData = Buffer.from(data, 'base64');
 
 

@@ -1,12 +1,9 @@
-import prisma from '@/app/lib/prismadb';
 import { authOptions } from '@/utils/authUptions';
-import {  ExamLevel } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { Readable } from 'stream';
 import cloudinary from '@/utils/cloudinary';
-import { revalidatePath } from 'next/cache';
 
 export async function POST(request: Request) {
   try {
@@ -63,7 +60,7 @@ export async function POST(request: Request) {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error: any) {
-    console.log(error, 'CREATING PROJECT');
+    console.log(error, 'Uploading File');
     return new NextResponse('Internal Error', { status: 500 });
   }
 }

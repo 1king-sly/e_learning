@@ -32,11 +32,7 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
   
     const router = useRouter()
   
-   
-  
-    
-  
-  
+ 
     const handleSubmit = async () => {
       const event = window.event;
       if (!event) {
@@ -46,17 +42,24 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
   
       toggleLoading();
       try {
-        toast.loading('Creating exam...');
+        toast.loading('Uploading document...');
         const response = await fetch('/api/create',{
           method:'POST',
           mode:'cors',
-          body:JSON.stringify(formData)
+          body:JSON.stringify(formData),
+          headers: {
+            'Content-Type': 'use client'
+          },          
 
         })
 
         
     
         if(response.ok){
+          toast.dismiss()
+          toast.loading('Creating exam...');
+
+
           const data = await response.json();
           
           const cloudinaryFileUrl = data;
@@ -74,14 +77,14 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
           }
           else{
             toast.dismiss()
-            toast.error('Something went wrong')
+            toast.error('Something went wrong while creating exam')
           }
   
           
         }
         else{
           toast.dismiss()
-          toast.error('Something went wrong')
+          toast.error('Something went wrong while uploading file')
         }
       } catch (error) {
         toast.dismiss();
