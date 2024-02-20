@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Button from '@/app/(ui)/Button';
@@ -39,52 +38,55 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
         return;
       }
       event.preventDefault();
-  
+    
       toggleLoading();
       try {
         toast.loading('Uploading document...');
-        const response = await fetch('/api/create',{
-          method:'POST',
-          mode:'cors',
-          body:JSON.stringify(formData),
-          headers: {
-            'Content-Type': 'use client'
-          },          
-
-        })
-
-        
     
-        if(response.ok){
-          toast.dismiss()
-          toast.loading('Creating exam...');
-
-
+        const formDataToUpload = new FormData();
+        formDataToUpload.append('file', formData.imagePreview as unknown as  Blob);
+        formDataToUpload.append('upload_preset', 'psy5tipf'); 
+    
+        const response = await fetch('https://api.cloudinary.com/v1_1/dwav3nker/upload', {
+          method: 'POST',
+          body: formDataToUpload,
+        });
+    
+        if (response.ok) {
           const data = await response.json();
-          
-          const cloudinaryFileUrl = data;
 
+          const cloudinaryFileUrl = data.secure_url;
+
+    
           setFormData({
             ...formData,
             cloudinaryFileUrl: cloudinaryFileUrl,
           });
+    
+          toast.dismiss();
+          toast.loading('Creating exam...');
 
-          const create = await createExam(formData)
-          if(create){
-            toast.dismiss()
-            toggleVisible()
-            toast.success('Exam created Successfully')
+          const newFormData =  new FormData();
+
+          newFormData.append('file',cloudinaryFileUrl)
+          newFormData.append('title',formData.title)
+          newFormData.append('level',formData.level)
+          newFormData.append('category',formData.category)
+
+
+
+          const create = await createExam(newFormData);
+          if (create) {
+            toast.dismiss();
+            toggleVisible();
+            toast.success('Exam created Successfully');
+          } else {
+            toast.dismiss();
+            toast.error('Error creating exam');
           }
-          else{
-            toast.dismiss()
-            toast.error('Something went wrong while creating exam')
-          }
-  
-          
-        }
-        else{
-          toast.dismiss()
-          toast.error('Something went wrong while uploading file')
+        } else {
+          toast.dismiss();
+          toast.error('Error uploading file');
         }
       } catch (error) {
         toast.dismiss();

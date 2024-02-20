@@ -773,12 +773,15 @@ export const deleteSingleCluster = async (formData: FormData) => {
 
 
 
-export const createExam = async (formData:any) => {
+export const createExam = async (formData:FormData) => {
+
   try {
-    const title = formData.title
-    const file = formData.cloudinaryFileUrl 
-    const category = formData.category
-    const level = formData.level
+    const title = formData.get('title') as string
+    const file = formData.get('file') as string  
+    const category = formData.get('category') as string
+    const level = formData.get('level') as string
+
+  
 
     if(!title || !file || !category || !level ){
       throw new Error('Misssing Required Info')
