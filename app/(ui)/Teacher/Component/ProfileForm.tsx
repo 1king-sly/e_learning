@@ -21,7 +21,8 @@ export default function ProfileForm({user}:{user:any})
       file: null as { name: string, type: string, binary: string } | null,
       imagePreview: null as string | null,
       registrationNumber:'',
-      userId:user.id
+      userId:user.id,
+      cloudinaryFileUrl:''
     });
   
     const toggleLoading = () => {
@@ -46,9 +47,40 @@ export default function ProfileForm({user}:{user:any})
   
       toggleLoading();
       try {
+
         toast.loading('Updating user...');
-      
-        const create = await updateUser(formData)
+        const formDataToUpload = new FormData();
+        formDataToUpload.append('file', formData.imagePreview as unknown as  Blob);
+        formDataToUpload.append('upload_preset', 'psy5tipf'); 
+    
+        const response = await fetch('https://api.cloudinary.com/v1_1/dwav3nker/upload', {
+          method: 'POST',
+          body: formDataToUpload,
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+
+          const cloudinaryFileUrl = data.secure_url;
+
+    
+          setFormData({
+            ...formData,
+            cloudinaryFileUrl: cloudinaryFileUrl,
+          });
+    
+          toast.dismiss();
+
+          const newFormData =  new FormData();
+
+          newFormData.append('file',cloudinaryFileUrl)
+          newFormData.append('firstName',formData.firstName)
+          newFormData.append('secondName',formData.secondName)
+          newFormData.append('password',formData.password)
+          newFormData.append('registrationNumber',formData.registrationNumber)
+          newFormData.append('userId',formData.userId)
+
+        const create = await updateUser(newFormData)
     
         if(create){
           toast.dismiss()
@@ -58,6 +90,7 @@ export default function ProfileForm({user}:{user:any})
           toast.dismiss()
           toast.error('Something went wrong')
         }
+      }
       } catch (error) {
         toast.dismiss();
         toast.error('Server Side error');
