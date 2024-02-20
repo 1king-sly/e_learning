@@ -73,9 +73,8 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
           newFormData.append('level',formData.level)
           newFormData.append('category',formData.category)
 
-
-
           const create = await createExam(newFormData);
+          
           if (create) {
             toast.dismiss();
             toggleVisible();
