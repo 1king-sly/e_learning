@@ -22,7 +22,7 @@ export default async function StudentPage({searchParams}:{searchParams:string}) 
 
             <div>
             <div className='mx-20 w-full flex justify-center'>
-                <table className='w-full'>
+                <table className='w-4/5'>
                     <tbody className='flex flex-col w-full gap-3'>
                         {students?.map((student)=>(
 
