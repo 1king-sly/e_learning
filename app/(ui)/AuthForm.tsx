@@ -184,7 +184,7 @@ export default function AuthForm() {
            />
            <div
              className='absolute inset-y-0 right-0 flex  pr-1 cursor-pointer   items-center mt-7 '
-             onClick={togglePasswordVisibility}
+             onClick={togglePasswordVisibility} 
            >
              {showPassword ? (
               <EyeSlashIcon className='w-4 max-[425px]:w-3'/>
