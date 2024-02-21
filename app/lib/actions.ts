@@ -82,6 +82,9 @@ export const fetchUserCreatedExams = async (userId:number | undefined) => {
         where: {
           createdById:parseInt(userId as unknown as string),
         },
+        orderBy:{
+          createdAt:'desc'
+        }
        }
       )
       return examsCreated
@@ -105,7 +108,10 @@ export const fetchUserCreatedExamsDashboard = async (userId:string | undefined) 
         where: {
           createdById:parseInt(userId as unknown as string),
         },
-        take:5
+        take:5,
+        orderBy:{
+          createdAt:'desc'
+        }
        }
       )
       return examsCreated
