@@ -82,6 +82,9 @@ export const fetchUserCreatedExams = async (userId:number | undefined) => {
         where: {
           createdById:parseInt(userId as unknown as string),
         },
+        orderBy:{
+          createdAt:'desc'
+        }
        }
       )
       return examsCreated
@@ -105,7 +108,10 @@ export const fetchUserCreatedExamsDashboard = async (userId:string | undefined) 
         where: {
           createdById:parseInt(userId as unknown as string),
         },
-        take:5
+        take:5,
+        orderBy:{
+          createdAt:'desc'
+        }
        }
       )
       return examsCreated
@@ -340,14 +346,14 @@ export const updateCluster = async (formData: FormData) => {
   }  
 };
 
-export const updateUser = async (formData: any) => {
-  const userId = formData.userId;
-  const email = formData.email;
-  const registrationNumber = formData.registrationNumber;
-  const password = formData.password;
-  const image = formData.file
-  const firstName = formData.firstName
-  const secondName = formData.secondName
+export const updateUser = async (formData: FormData) => {
+  const userId = formData.get('userId') as string ;
+  const email = formData.get('email') as string;
+  const registrationNumber = formData.get('registrationNumber') as string
+  const password = formData.get('password') as string;
+  const image = formData.get('file') as string
+  const firstName = formData.get('firstName') as string
+  const secondName = formData.get('secondName') as string
 
   try {
     const data: Record<string, string> = {};
@@ -370,38 +376,8 @@ export const updateUser = async (formData: any) => {
     }
 
     if (image !== null) {
-      const { binary, type } = image;
-
-      const bufferData = Buffer.from(binary, 'base64');
-
-
-      const uploadPromise = new Promise<string>((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          {
-            resource_type: 'auto',
-            use_filename: true,
-            unique_filename: false,
-          },
-          async (error, result) => {
-            if (error) {
-              console.error(error);
-              reject('Cloudinary upload error');
-            } else {
-              resolve(result?.secure_url || '');
-            }
-          }
-        );
-  
-        const readableStream = new Readable();
-        readableStream.push(bufferData);
-        readableStream.push(null);
-  
-        readableStream.pipe(uploadStream);
-      });
-  
-      const cloudinaryFileUrl = await uploadPromise;
-
-      data.image = cloudinaryFileUrl
+ 
+      data.image = image
 
 
     }
@@ -773,50 +749,21 @@ export const deleteSingleCluster = async (formData: FormData) => {
 
 
 
-export const createExam = async (formData:any) => {
+export const createExam = async (formData:FormData) => {
+
   try {
-    const title = formData.title
-    const file = formData.file 
-    const category = formData.category
-    const level = formData.level
+    const title = formData.get('title') as string
+    const file = formData.get('file') as string  
+    const category = formData.get('category') as string
+    const level = formData.get('level') as string
+
+  
 
     if(!title || !file || !category || !level ){
       throw new Error('Misssing Required Info')
     }
-   
-    const { data, type } = file;
-
-
-    const bufferData = Buffer.from(data, 'base64');
-
-
-    const uploadPromise = new Promise<string>((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: 'raw',
-          use_filename: true,
-          unique_filename: false,
-          format: 'pdf',
-        },
-        async (error, result) => {
-          if (error) {
-            console.error(error);
-            reject('Cloudinary upload error');
-          } else {
-            console.log(result?.secure_url);
-            resolve(result?.secure_url || '');
-          }
-        }
-      );
-
-      const readableStream = new Readable();
-      readableStream.push(bufferData);
-      readableStream.push(null);
-
-      readableStream.pipe(uploadStream);
-    });
-
-    const cloudinaryFileUrl = await uploadPromise;
+ 
+    
 
     const session = await getServerSession(authOptions);
 
@@ -831,7 +778,7 @@ export const createExam = async (formData:any) => {
         title: title,
         authorId: authorId,
         createdById: authorId,
-        file: cloudinaryFileUrl,
+        file: file,
         level: ExamLevel[level as keyof typeof ExamLevel],
         clusters: {
           connect: { id: parseInt(category) },

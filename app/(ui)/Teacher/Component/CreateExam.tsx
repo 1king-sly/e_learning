@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Button from '@/app/(ui)/Button';
@@ -11,7 +10,7 @@ import { createExam } from '@/app/lib/actions';
 
 
 
-export default function CreateExam({clusterId}: {clusterId: string}) {
+export default function CreateExam({clusterId,label}: {clusterId: string,label:string}) {
     const[visible,setVisible]= useState(false)
     const [loading, setisLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
@@ -21,7 +20,8 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
       level: '',
       file: null as { name: string, type: string, data: string } | null,
       imagePreview: null as string | null,
-    });
+      cloudinaryFileUrl: null as string | null,
+      });
   
     const toggleLoading = () => {
       setisLoading((prevLoading) => !prevLoading);
@@ -31,32 +31,61 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
   
     const router = useRouter()
   
-   
-  
-    
-  
-  
+ 
     const handleSubmit = async () => {
       const event = window.event;
       if (!event) {
         return;
       }
       event.preventDefault();
-  
+    
       toggleLoading();
       try {
-        toast.loading('Creating exam...');
-      
-        const create = await createExam(formData)
+        toast.loading('Uploading document...');
     
-        if(create){
-          toast.dismiss()
-          toggleVisible()
-          toast.success('Exam created Successfully')
-        }
-        else{
-          toast.dismiss()
-          toast.error('Something went wrong')
+        const formDataToUpload = new FormData();
+        formDataToUpload.append('file', formData.imagePreview as unknown as  Blob);
+        formDataToUpload.append('upload_preset', 'psy5tipf'); 
+    
+        const response = await fetch('https://api.cloudinary.com/v1_1/dwav3nker/upload', {
+          method: 'POST',
+          body: formDataToUpload,
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+
+          const cloudinaryFileUrl = data.secure_url;
+
+    
+          setFormData({
+            ...formData,
+            cloudinaryFileUrl: cloudinaryFileUrl,
+          });
+    
+          toast.dismiss();
+          toast.loading('Creating ...');
+
+          const newFormData =  new FormData();
+
+          newFormData.append('file',cloudinaryFileUrl)
+          newFormData.append('title',formData.title)
+          newFormData.append('level',formData.level)
+          newFormData.append('category',formData.category)
+
+          const create = await createExam(newFormData);
+          
+          if (create) {
+            toast.dismiss();
+            toggleVisible();
+            toast.success(' Created Successfully');
+          } else {
+            toast.dismiss();
+            toast.error('Something went wrong');
+          }
+        } else {
+          toast.dismiss();
+          toast.error('Error uploading file');
         }
       } catch (error) {
         toast.dismiss();
@@ -114,11 +143,11 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
     <div className='w-full flex flex-col justify-center items-center'>
         <div className='w-full flex justify-between'>
           <div>
-            <h1 className='text-4xl font-serif font-bold mx-20 mt-10'>Exams</h1>
+            <h1 className='text-4xl font-serif font-bold mx-20 mt-10'>{label}</h1>
           </div>
-          <div className='cursor-pointer mx-20 mt-10' onClick={toggleVisible}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 12.5H6v-1h5.5V6h1v5.5H18v1h-5.5V18h-1z"/></svg>
-          </div>
+          <div className='mt-10 mx-20 cursor-pointer' onClick={toggleVisible}>
+                    <button className='border lg:rounded-lg rounded-full border-black py-1 px-2 text-sm cursor-pointer hidden lg:block'> Add </button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 12.5H6v-1h5.5V6h1v5.5H18v1h-5.5V18h-1z" className=' lg:hidden '/></svg>                </div>
           </div>
         <div>
         <form  className={clsx(`w-[80vw] flex flex-col gap-2`,!visible && 'hidden')}>

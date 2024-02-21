@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Button from '@/app/(ui)/Button';
@@ -21,7 +20,8 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
       level: '',
       file: null as { name: string, type: string, data: string } | null,
       imagePreview: null as string | null,
-    });
+      cloudinaryFileUrl: null as string | null,
+      });
   
     const toggleLoading = () => {
       setisLoading((prevLoading) => !prevLoading);
@@ -31,32 +31,61 @@ export default function CreateExam({clusterId}: {clusterId: string}) {
   
     const router = useRouter()
   
-   
-  
-    
-  
-  
+ 
     const handleSubmit = async () => {
       const event = window.event;
       if (!event) {
         return;
       }
       event.preventDefault();
-  
+    
       toggleLoading();
       try {
-        toast.loading('Creating exam...');
-      
-        const create = await createExam(formData)
+        toast.loading('Uploading document...');
     
-        if(create){
-          toast.dismiss()
-          toggleVisible()
-          toast.success('Exam created Successfully')
-        }
-        else{
-          toast.dismiss()
-          toast.error('Something went wrong')
+        const formDataToUpload = new FormData();
+        formDataToUpload.append('file', formData.imagePreview as unknown as  Blob);
+        formDataToUpload.append('upload_preset', 'psy5tipf'); 
+    
+        const response = await fetch('https://api.cloudinary.com/v1_1/dwav3nker/upload', {
+          method: 'POST',
+          body: formDataToUpload,
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+
+          const cloudinaryFileUrl = data.secure_url;
+
+    
+          setFormData({
+            ...formData,
+            cloudinaryFileUrl: cloudinaryFileUrl,
+          });
+    
+          toast.dismiss();
+          toast.loading('Creating exam...');
+
+          const newFormData =  new FormData();
+
+          newFormData.append('file',cloudinaryFileUrl)
+          newFormData.append('title',formData.title)
+          newFormData.append('level',formData.level)
+          newFormData.append('category',formData.category)
+
+          const create = await createExam(newFormData);
+          
+          if (create) {
+            toast.dismiss();
+            toggleVisible();
+            toast.success('Exam created Successfully');
+          } else {
+            toast.dismiss();
+            toast.error('Error creating exam');
+          }
+        } else {
+          toast.dismiss();
+          toast.error('Error uploading file');
         }
       } catch (error) {
         toast.dismiss();

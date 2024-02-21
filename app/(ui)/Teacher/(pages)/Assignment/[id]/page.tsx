@@ -3,6 +3,7 @@ import React from 'react';
 import {  fetchSingleCluster } from '@/app/lib/actions';
 import SearchBar from '@/app/(ui)/Student/Component/SearchBar';
 import Link from 'next/link';
+import CreateExam from '../../../Component/CreateExam';
 
 
 
@@ -17,6 +18,7 @@ export default async function Page({ params,searchParams }: { params: { id: stri
   return (
     <>
      <div className='p-10 pb-40 max-[425px]:p-1'>
+     <CreateExam label={'Assignments'} clusterId={clusterId}/>
       <SearchBar placeholder='Search'/>
         <div className='mx-20'>
         {datas && datas.exams && datas.exams.length > 0 ? (

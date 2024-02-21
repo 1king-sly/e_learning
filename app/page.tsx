@@ -5,6 +5,7 @@ import logo from "../public/images/logo.png";
 import AuthForm from "./(ui)/AuthForm";
 
 export default function Home() {
+  
   return (
     <>
       <div className="w-screen h-screen  flex bg-gray-100">
