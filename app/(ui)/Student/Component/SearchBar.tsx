@@ -25,7 +25,7 @@ export default function SearchBar({placeholder}:{placeholder:string}) {
   
       },200)
   return (
-    <div className='relative mx-20 my-5 '>
+    <div className='relative mx-20 my-5 max-[425px]:mx-6'>
 <input type="text"  name='searchBox'  placeholder={placeholder} className='w-full p-2 border-2 rounded-lg pr-10 outline-sky-300'   onChange={(e)=>{
         handleSearch(e.target.value)
       }}/>

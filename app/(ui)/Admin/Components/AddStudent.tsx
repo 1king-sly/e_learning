@@ -81,27 +81,28 @@ export default function AddStudent() {
     <>
         
             <div className='w-full flex justify-between'>
-                <div className=' mx-20 mt-10'>
-                    <h1 className='text-4xl font-serif font-bold'>Students</h1>
+                <div className=' mx-20 mt-10 max-[425px]:mx-6'>
+                    <h1 className='text-4xl font-serif font-bold max-[425px]:text-2xl'>Students</h1>
                 </div>
-                <div className='cursor-pointer mx-20 mt-10' onClick={toggleVisible}>
+                <div className='cursor-pointer mx-20 mt-10 max-[425px]:mx-6 ' onClick={toggleVisible}>
                     <button className='border lg:rounded-lg rounded-full border-black py-1 px-2 text-sm cursor-pointer hidden lg:block'>Add Student</button>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 12.5H6v-1h5.5V6h1v5.5H18v1h-5.5V18h-1z" className=' lg:hidden '/></svg>                </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 12.5H6v-1h5.5V6h1v5.5H18v1h-5.5V18h-1z" className=' lg:hidden '/></svg>                
+                </div>
             </div>
-        <div className={clsx(`px-20 py-10 flex flex-row gap-2 w-full justify-evenly `, !visible && 'hidden')}>
-            <input placeholder='First Name' className='rounded p-2' name='FName'
+        <div className={clsx(`px-20 py-5 md:flex sm:flex-none gap-2 w-full md:w-auto justify-evenly items-center `, !visible && 'hidden')}>
+            <input placeholder='First Name' className='rounded p-2 my-2 md:w-1/3 lg:w-auto' name='FName'
             value={formData.FName}
             onChange={handleChange}></input>
-            <input placeholder='Second Name' className='rounded p-2' name='SName'
+            <input placeholder='Second Name' className='rounded p-2 my-2 md:w-1/3 lg:w-auto' name='SName'
             value={formData.SName}
             onChange={handleChange}></input>
-            <input placeholder='Admission Number' className='rounded p-2' name='regNo'
+            <input placeholder='Admission Number' className='rounded p-2 my-2 md:w-1/3 lg:w-auto' name='regNo'
             value={formData.regNo}
             onChange={handleChange}></input>
         </div>
         
 
-        <div className={clsx(`px-20  w-full flex justify-end `, !visible && 'hidden')}>
+        <div className={clsx(`px-20  w-full md:flex justify-end sm:flex-none `, !visible && 'hidden')}>
             <button className='text-white bg-sky-300 rounded-md p-1'  onClick={handleSubmit}
               disabled={disabled}>Create</button>
         </div>
