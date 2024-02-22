@@ -19,9 +19,9 @@ export default async function page({searchParams}:{searchParams:string}) {
 
         <SearchBar placeholder='Search'/>
 
-        <div className='grid grid-cols-3 gap-3 mx-20'>
+        <div className='grid lg:grid-cols-3 md:grid-cols-2 gap-3 mx-20'>
           {clusters?.map((cluster)=>(
-                <div className='my-10 shadow-lg bg-gray-100 w-full h-[25vh] rounded-xl text-center text-lg' key={cluster.id}>
+                <div className='my-10 shadow-lg bg-gray-100 w-full h-[26vh] rounded-xl text-center text-lg' key={cluster.id}>
                <h1 className='py-5 px-2 truncate'>
                 {cluster.title}
                </h1>

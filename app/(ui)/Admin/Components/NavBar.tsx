@@ -13,7 +13,7 @@ export default function NavBar() {
     <>
       <div className='flex flex-col-3 sm:px-4 lg:px-8 items-center shadow-lg justify-between w-full h-full px-1'>
         <div className='gap-4 ml-10'>
-          <Link href='/NewAdmin/Dashboard'>
+          <Link href='/Admin/Dashboard'>
             <Image src={logo} alt='logo' className='w-20 h-20 py-3 cursor-pointer'></Image>
           </Link>
         </div>

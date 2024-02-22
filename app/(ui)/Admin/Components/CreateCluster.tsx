@@ -83,17 +83,18 @@ export default function CreateCluster() {
   return (
     <>
         <div className='w-full flex flex-col justify-center '>
-            <div className='flex flex-row justify-between'>
-                <div className='mx-20 mt-10'>
-                    <h1 className='text-4xl font-serif font-bold'>Clusters</h1>
+            <div className='w-full flex flex-row justify-between'>
+                <div className='mx-20 mt-10 max-[425px]:mx-6'>
+                    <h1 className='text-4xl font-serif font-bold max-[425px]:text-2xl'>Clusters</h1>
                 </div>
-                <div className='mt-10 mx-20 cursor-pointer' onClick={toggleVisible}>
+                <div className='mt-10 mx-20 cursor-pointer max-[425px]:mx-6' onClick={toggleVisible}>
                     <button className='border lg:rounded-lg rounded-full border-black py-1 px-2 text-sm cursor-pointer hidden lg:block'>Add Cluster</button>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 12.5H6v-1h5.5V6h1v5.5H18v1h-5.5V18h-1z" className=' lg:hidden '/></svg>                </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 12.5H6v-1h5.5V6h1v5.5H18v1h-5.5V18h-1z" className=' lg:hidden '/></svg>               
+                </div>
             </div>
         
             <div>
-          <form  className={clsx(`w-[80vw] flex flex-col gap-2`, !visible && 'hidden')} >
+          <form  className={clsx(`w-[80vw] mx-auto flex flex-col gap-2`, !visible && 'hidden')} >
             <div className='w-full flex justify-center items-center flex-col gap-2'>
               <textarea
                 name="title"
